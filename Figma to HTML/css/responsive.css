@@ -1,0 +1,83 @@
+@media only screen and (min-width:769px) and (max-width:1024px){
+
+}
+
+@media only screen and (min-width:427px) and (max-width:768px){
+	.inner_digital_marketing{
+		padding: 30px 15px;
+	}
+	.digital_marketing_heading h2{
+		font-size: 30px;
+	}
+
+	.digital_marketing_box{
+		flex-basis: 48%;
+	}
+	.outer_book{
+		margin-top: 15px;
+	}
+}
+
+@media only screen and (min-width:377px) and (max-width:426px){
+	.header{
+		flex-direction: column;
+	}
+	.header_left{
+		margin-bottom: 10px;
+	}
+
+	.inner_digital_marketing{
+		padding: 15px;
+	}
+	.digital_marketing_heading h2{
+		font-size: 24px;
+	}
+
+	.digital_marketing{
+		flex-direction: column;
+	}
+
+	/*.digital_marketing_box{
+		flex-basis: 98%;
+	}*/
+	.outer_book{
+		margin-top: 15px;
+	}
+
+	.book_button{
+		padding: 12px 28px;
+		font-size: 16px;
+	}
+}
+
+@media only screen and (max-width:376px){
+	.header{
+		flex-direction: column;
+	}
+	.header_left{
+		margin-bottom: 10px;
+	}
+
+	.inner_digital_marketing{
+		padding: 15px;
+	}
+	.digital_marketing_heading h2{
+		font-size: 24px;
+	}
+
+	.digital_marketing{
+		flex-direction: column;
+	}
+
+	/*.digital_marketing_box{
+		flex-basis: 98%;
+	}*/
+	.outer_book{
+		margin-top: 15px;
+	}
+
+	.book_button{
+		padding: 12px 28px;
+		font-size: 16px;
+	}
+}

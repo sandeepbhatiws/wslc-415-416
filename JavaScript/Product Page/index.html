@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopHub - Product Listing</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h2><i class="fas fa-shopping-bag"></i> ShopHub</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">Products</a>
+                <a href="#" class="nav-link">Categories</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+                <button class="cart-btn"><i class="fas fa-shopping-cart"></i> <span class="cart-count">3</span></button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Discover Amazing Products</h1>
+            <p>Shop the latest trends with unbeatable prices and quality</p>
+            <button class="cta-btn">Shop Now</button>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-group">
+                <label>Category:</label>
+                <select class="filter-select">
+                    <option>All Categories</option>
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home & Garden</option>
+                    <option>Sports</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort by:</label>
+                <select class="filter-select">
+                    <option>Featured</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Newest</option>
+                    <option>Best Rated</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Price Range:</label>
+                <select class="filter-select">
+                    <option>All Prices</option>
+                    <option>$0 - $50</option>
+                    <option>$50 - $100</option>
+                    <option>$100 - $200</option>
+                    <option>$200+</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products">
+        <div class="container">
+            <div class="products-grid" id="products-grid">
+                <!-- Product Card 1 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="Wireless Headphones">
+                        <div class="product-badge">New</div>
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Wireless Bluetooth Headphones</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(4.8)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$89.99</span>
+                            <span class="original-price">$129.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+
+                <!-- Product Card 2 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop" alt="Smart Watch">
+                        <div class="product-badge sale">Sale</div>
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smart Fitness Watch</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(4.2)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$199.99</span>
+                            <span class="original-price">$299.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+
+                <!-- Product Card 3 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop" alt="Running Shoes">
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Premium Running Shoes</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(4.9)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$149.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+
+                <!-- Product Card 4 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop" alt="Laptop">
+                        <div class="product-badge hot">Hot</div>
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Ultra Slim Laptop</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(4.7)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$899.99</span>
+                            <span class="original-price">$1099.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+
+                <!-- Product Card 5 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&h=300&fit=crop" alt="Coffee Maker">
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smart Coffee Maker</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(4.1)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$79.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+
+                <!-- Product Card 6 -->
+                <!-- <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop" alt="Camera">
+                        <div class="product-badge">Featured</div>
+                        <div class="product-actions">
+                            <button class="action-btn"><i class="fas fa-heart"></i></button>
+                            <button class="action-btn"><i class="fas fa-shopping-cart"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Professional Camera</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(4.6)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$599.99</span>
+                            <span class="original-price">$699.99</span>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-shopping-bag"></i> ShopHub</h3>
+                    <p>Your one-stop destination for quality products at great prices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and updates.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html> 

@@ -1,0 +1,179 @@
+*{
+	padding: 0px;
+	margin: 0px;
+}
+
+body{
+	font-family: "Roboto", sans-serif;
+}
+
+a{
+	text-decoration: none;
+	color: black;
+}
+
+.main{
+	width: 100%;
+}
+
+.outer_header{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 60px;
+	padding-bottom: 15px;
+	box-sizing: border-box;
+	box-shadow: 0px 0px 3px 1px gray;
+	background: white;
+	position: sticky;
+	top: 0px;
+}
+
+.menu ul{
+	display: flex;
+	list-style: none;
+	text-transform: uppercase;
+	padding-top: 5px;
+}
+.menu ul li{
+	padding: 15px 20px;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.menu ul li a{
+	color: #282C3F;
+}
+
+.outer_search{
+	display: flex;
+	background: #F5F5F6;
+	padding: 10px;
+	flex-basis: 35%;
+	border-radius: 5px;
+	align-items: center;
+}
+
+.search_icon{
+	flex-basis: 5%;
+}
+.search_box{
+	flex-basis: 95%;
+}
+.search_box input{
+	width: 100%;
+	background: #F5F5F6;
+	padding: 2px;
+	box-sizing: border-box;
+	border: 0px;
+}
+.search_box input:focus{
+	outline: 0;
+}
+
+.header_right{
+	display: flex;
+	gap: 15px;
+}
+
+.logo img{
+	width: 50px;
+    padding-top: 15px;
+}
+.header_profile{
+	text-align: center;
+}
+.profile{
+	font-size: 13px;
+	text-transform: capitalize;
+	font-weight: bold;
+/*	padding: 0px 15px;*/
+}
+
+.outer_flat{
+	width: 100%;
+	padding: 5px 60px;
+	box-sizing: border-box;
+}
+
+.outer_flat img{
+	width: 100%;
+}
+
+.outer_banner{
+	width: 100%;
+	padding: 0px 60px;
+	box-sizing: border-box;
+	display: flex;
+}
+.banner img{
+	width: 100%;
+}
+
+.outer_associate{
+	width: 100%;
+	padding: 0px 60px;
+	box-sizing: border-box;
+	display: flex;
+}
+.associate{
+	flex-grow: 1;
+}
+.associate img{
+	width: 100%;
+}
+
+.outer_main_coupon{
+	width: 100%;
+	padding: 0px 60px;
+	box-sizing: border-box;
+}
+.main_coupon img{
+	width: 100%;
+}
+.outer_coupon{
+	display: flex;
+}
+.coupon img{
+	width: 100%;
+}
+.outer_deal_products{
+	display: flex;
+	padding: 20px 60px;
+	/*position: relative;
+	left: -600px;
+	top: 500px;*/
+
+	/*position: absolute;
+	left: 0px;
+	top: 100px;*/
+}
+.deal_products img{
+	width: 100%;
+}
+.outer_category{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.category{
+	flex-basis: 16.66%;
+}
+.category img{
+	width: 100%;
+}
+
+.fixed_icons{
+	background: black;
+	width: 65px;
+	border-radius: 50%;
+	position: fixed;
+	bottom: 35px;
+	right: 35px;
+}
+.whatsup_icon{
+	font-size: 40px;
+	color: white;
+	padding: 15px;
+}

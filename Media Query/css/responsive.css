@@ -1,0 +1,35 @@
+@media only screen and (min-width:769px) and (max-width:1024px){
+	body{
+		background: red;
+	}
+}
+
+@media only screen and (min-width:427px) and (max-width:768px){
+	body{
+		background: purple;
+	}
+}
+
+@media only screen and (min-width:377px) and (max-width:426px){
+	body{
+		background: green;
+	}
+
+	.row{
+		font-size: 30px;
+	}
+}
+
+@media only screen and (max-width:376px){
+	.row{
+		font-size: 20px;
+	}
+}
+
+/*@media only screen and (min-width:0px) and (max-width:376px){
+	
+}*/
+
+/*@media only screen and (min-width:0px) and (max-width:320px){
+	
+}*/

@@ -1,0 +1,161 @@
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+a{
+	text-decoration: none;
+	color: black;
+}
+
+body{
+	font-family: "Inter", sans-serif;
+}
+
+.outerDiv{
+	width: 100%;
+}
+.outer_header{
+	width: 100%;
+	background: white;
+}
+
+.header{
+	max-width: 1170px;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 22px 15px;
+	box-sizing: border-box;
+}
+
+.header_left img{
+	width: 204px;
+}
+
+.header_right{
+	display: flex;
+	gap: 10px;
+}
+
+.outer_chat{
+	display: flex;
+	border-radius: 8px;
+	border-width: 1px;
+	padding: 10px 18px;
+	gap: 10px;
+	background: #FFFFFF;
+	border: 1px solid #27AE60;
+	box-shadow: 0px 1px 2px 0px #1018280D;
+}
+.outer_call{
+	border-radius: 8px;
+	border-width: 1px;
+	padding: 10px 18px;
+	background: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+	border: 1px solid;
+	border-image-source: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+	box-shadow: 0px 1px 2px 0px #1018280D;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 24px;
+	letter-spacing: 0%;
+	color: #FFFFFF;
+}
+
+.chat_content{
+	font-weight: 400;
+	font-size: 16px;
+	leading-trim: Cap height;
+	line-height: 24px;
+	letter-spacing: 0%;
+	text-transform: capitalize;
+	color: #27AE60;
+}
+
+.outer_digital_marketing{
+	width: 100%;
+	background: #F7FAFF;
+}
+.inner_digital_marketing{
+	max-width: 1170px;
+	margin: auto;
+	padding: 50px 15px;
+	box-sizing: border-box;
+}
+
+.digital_marketing{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.5%;
+	margin-top: 30px;
+}
+
+.digital_marketing_box{
+	flex-basis: 31%;
+	flex-grow: 1;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	border-width: 1px;
+	background: #FFFFFF;
+	border: 1px solid #F2F4F7;
+	box-shadow: 0px 1px 2px 0px #1018280D;
+	padding: 25px 20px;
+	box-sizing: border-box;
+}
+
+.digital_content h3{
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 100%;
+	letter-spacing: 0%;
+	color: #0A2134;
+	padding: 10px 0px;
+	box-sizing: border-box;
+}
+
+.digital_content p{
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 26px;
+	letter-spacing: 0%;
+	color: #0A2134;
+}
+
+.digital_marketing_heading h2{
+	font-weight: 700;
+	font-size: 36px;
+	line-height: 100%;
+	letter-spacing: 0%;
+	color: #0A2134;
+	padding-bottom: 15PX;
+}
+
+.digital_marketing_heading p{
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 27px;
+	letter-spacing: 0%;
+	color: #0A2134;
+}
+
+.outer_book{
+	text-align: center;
+	margin-top: 30px;
+}
+
+.book_button{
+	border-radius: 8px;
+	border-width: 1px;
+	padding: 16px 48px;
+	background: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+	border: 1px solid;
+	border-image-source: linear-gradient(93.77deg, #0ACEFE -6.36%, #2699FB 50.16%);
+	box-shadow: 0px 1px 2px 0px #1018280D;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 28px;
+	letter-spacing: 0%;
+	color: #FFFFFF;
+}

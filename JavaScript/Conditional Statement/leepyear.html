@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Leap Year</title>
+    </head>
+
+    <body>
+
+        <script>
+            var year = prompt('Enter the year');
+
+            if(year % 400 == 0){
+                document.write('Leap Year');
+            } else if(year % 100 == 0){
+                document.write('Not a Leap Year');
+            } else if(year % 4 == 0) {
+                document.write('Leap Year');
+            } else {
+                document.write('Invalid Value');
+            }
+            
+
+        </script>
+    </body>
+</html>

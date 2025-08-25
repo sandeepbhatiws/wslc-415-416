@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Temparture Converter</title>
+    </head>
+
+    <body>
+
+
+
+        <script>
+            var from = prompt('Enter the from value (eg: - C (Celsius), F- Faherehniet, K - Kelvin )');
+            var to = prompt('Enter the to value (eg: - C (Celsius), F- Faherehniet, K - Kelvin )');
+            var number = parseInt(prompt('Enter the number'));
+
+
+            from    = from.toLowerCase();
+            from    = from.toUpperCase();
+            to      = to.toUpperCase();
+
+            if(from == 'K' && to == 'F'){
+                var formula = (number - 273.15) * 9/5 + 32;
+                document.write(formula.toFixed(2));
+            } else if(from == 'F' && to == 'K'){
+                var formula = (number - 32) * 5/9 + 273.15;
+                document.write(formula.toFixed(2));
+            }
+            
+
+        </script>
+    </body>
+</html>

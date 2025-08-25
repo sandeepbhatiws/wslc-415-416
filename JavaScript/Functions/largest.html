@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Largest value</title>
+    </head>
+    <body>
+
+        <button onclick="getLargest()">Largest Value</button>
+        <button onclick="getSmallest()">Smallest Value</button>
+        <button onclick="getNames()">User Names</button>
+        
+
+        <script>
+
+            var numbers = [23,43,78,12,43,90,32,12,56,32];
+
+            function getLargest(){
+
+                var n = numbers[0];
+
+                for(var data of numbers){
+                    if(data > n){
+                        n = data;
+                    }
+                    
+                }
+                console.log(n);
+
+            }
+
+            function getSmallest(){
+
+                var n = numbers[0];
+
+                for(var data of numbers){
+                    if(data < n){
+                        n = data;
+                    }
+                    
+                }
+                console.log(n);
+
+            }
+
+
+            function getNames(){
+                var userNames =['Aditya', 'Amal', 'Dhruv', 'Jatinder', 'Lovely', 'Mamta', 'Manish', 'Pankaj', 'Prayag', 'Raghav', 'Rupesh', 'Umesh', 'Ishan'];
+                
+                var vowels = ['a', 'i', 'o', 'u', 'e'];
+
+                for(var name of userNames){
+                    if(vowels.includes(name[0].toLowerCase())){
+                        if(name.length > 4){
+                            console.log(name);
+                        }
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

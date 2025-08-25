@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Conditional Statement</title>
+    </head>
+
+    <body>
+
+
+
+        <script>
+            var a = 150;
+
+            // if(a == 15){
+            //     document.write('Correct');
+            // }
+
+            if(a != 15){
+                // document.write('Not Correct');
+            }
+
+            // var b = prompt('Enter the number');
+
+            // if(b %2 == 0){
+            //     document.write('Even Number');
+            // } else {
+            //     document.write('Odd Number');
+            // }
+
+
+            var percentage = prompt('Enter the percentage');
+
+            if(percentage > 100){
+                document.write('Value must be less than 100')
+            } else if(percentage <= 100 && percentage >= 60){
+                document.write('First Division');
+            } else if(percentage < 60 && percentage >= 48){
+                document.write('Second Division');
+            } else if(percentage < 48 && percentage > 33){
+                document.write('Third Division');
+            } else if(percentage <= 33 && percentage >= 0){
+                document.write('Fail');
+            } else {
+                document.write('Invalid Value');
+            }
+
+
+
+        </script>
+    </body>
+</html>

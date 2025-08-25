@@ -1,0 +1,18 @@
+{
+  "name": "digital-sale-offer-ui",
+  "version": "1.0.0",
+  "description": "A visually appealing digital sale offer UI themed around August 15.",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "live-server src"
+  },
+  "keywords": [
+    "digital",
+    "sale",
+    "offer",
+    "UI",
+    "August 15"
+  ],
+  "author": "",
+  "license": "ISC"
+}

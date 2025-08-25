@@ -1,0 +1,19 @@
+.bg-red{
+	background: #E21D24;
+}
+.logo{
+	width: 280px;
+}
+.navbar-nav li{
+	font-weight: bold;
+}
+.menu-dropdown:hover .dropdown-menu{
+	display: block;
+}
+.menu-nav-link{
+	padding-top: 35px !important;
+	padding-bottom: 35px !important;
+}
+.services-icon{
+	width: 100px !important;
+}

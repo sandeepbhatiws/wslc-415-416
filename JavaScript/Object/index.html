@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Object</title>
+    </head>
+    <body>
+
+
+        <script>
+            var userInfo = {
+                email : 'sandeep@gmail.com',
+                name : 'Sandeep',
+                mobile_number : 123457890
+            }
+
+            // console.log(userInfo);
+            // console.log('Name - ', userInfo.name);
+            // console.log('Email - ', userInfo.email);
+
+            var userInfos = [
+                {
+                    name : 'User 1',
+                    email : 'user1@gmail.com',
+                    age : 32
+                },
+                {
+                    email : 'user2@gmail.com',
+                    name : 'User 2',
+                    age : 25
+                }, 
+                {
+                    age : 22,
+                    name : 'User 3',
+                    email : 'user3@gmail.com',
+                }
+            ]
+
+            userInfos.forEach((value, i) => {
+                if(userInfos[i].email == 'user2@gmail.com'){
+                    console.log(userInfos[i].name);
+                    console.log(userInfos[i].email);
+                    console.log(userInfos[i].age);
+                }
+            })
+        </script>
+    </body>
+</html>

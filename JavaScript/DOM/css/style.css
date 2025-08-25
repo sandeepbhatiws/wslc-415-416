@@ -1,0 +1,27 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.row{
+    width: 1200px;
+    margin: auto;
+}
+
+.row1{
+    padding: 15px;
+    box-sizing: border-box;
+    margin-top: 25px;
+    border: 1px solid gray;
+    font-size: 20px;
+}
+
+.output{
+    padding: 15px;
+    box-sizing: border-box;
+    margin-top: 25px;
+    border: 1px solid gray;
+    font-size: 20px;
+    background-color: red;
+    color: white;
+}

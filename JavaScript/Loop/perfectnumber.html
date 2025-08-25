@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Array</title>
+    </head>
+    <body>
+
+
+
+        <script>
+            var number = prompt('Enter the number');
+            var sum = 0;
+
+            for(i = 1; i < number; i++){
+                if(number % i == 0){
+                    sum += i;  // sum = sum +i;
+                }
+            }
+
+            if(number == sum){
+                document.write('Is Perfect Number '+ sum);
+            } else {
+                document.write('Is Not a Perfect Number '+ sum);
+            }
+
+        </script>
+    </body>
+</html>

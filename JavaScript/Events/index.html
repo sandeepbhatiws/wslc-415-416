@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Events</title>
+    </head>
+    <body>
+        <button onclick="displayData()"> On Click </button>
+        <button ondblclick="displayData()"> On Double Click </button>
+        <button onmouseover="displayData()"> On Mouse Over </button>
+        <button onmouseenter="displayData()"> On Mouse Enter </button>
+        <button onmouseover="displayData()" onmouseout="displayData()"> On Mouse Out </button>
+        <button onmouseover="displayData()" onmouseleave="displayData()"> On Mouse Leave </button>
+        <button onmousedown="displayData()" onmouseup="displayData()"> On Mouse Down / Up </button>
+        
+        <button onmousemove="displayData()"> On Mouse Move </button>
+        <button onmousewheel="displayData()"> On Mouse Wheel </button>
+
+        <!-- <input type="text" onkeydown="getValue()" id="input" /> -->
+         <input type="text" onkeyup="getValue()" id="input" required/>
+
+        <input type="text" onfocus="displayData()" onblur="displayData()" id="input" />
+
+        <input type="text" onchange="displayData()" id="input" />
+        
+
+        <script src="custom.js"></script>
+    </body>
+</html>

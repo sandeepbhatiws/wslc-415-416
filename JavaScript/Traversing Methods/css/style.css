@@ -1,0 +1,36 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.main{
+    width: 1200px;
+    margin: auto;
+}
+
+.question_answer{
+    margin-top: 25px;
+    border: 1px solid gray;
+}
+
+.question{
+    padding: 15px;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+}
+.question span {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.answer{
+    padding: 15px;
+}
+
+.d-none{
+    display: none;
+}

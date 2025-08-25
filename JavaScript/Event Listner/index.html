@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+</head>
+<body>
+    
+
+    <button>Click ME 1</button>
+    <button>Click ME 2</button>
+    <button>Click ME 3</button>
+    <button>Click ME 4</button>
+    <button>Click ME 5</button>
+
+
+    <script>
+        var allButtons = document.querySelectorAll('button');
+
+        allButtons.forEach((value) => {
+            value.addEventListener('click', (event) => {
+                console.log(event.target);
+            })
+        })
+
+        
+
+
+
+        // function clickMe(){
+        //     console.log('Welcome to WS');
+        // }
+
+        // // document.getElementById('click').addEventListener('click', clickMe);
+
+
+
+        // document.getElementById('click').addEventListener('click', (e) => {
+        //     // console.log('Welcome to WsCube Tech');
+        //     console.log(e.target.innerText)
+        // });
+
+    </script>
+</body>
+</html>

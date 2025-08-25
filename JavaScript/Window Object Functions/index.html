@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>Window Object Functions</title>
+    </head>
+    <body>
+        <button onclick="showValue()">Set Time Out</button>
+        <button onclick="clearValue()">Clear Time Out</button>
+
+
+        <button onclick="setIntervalValue()">Set Interval</button>
+        <button onclick="clearIntervalValue()">Clear Interval</button>
+
+
+        <script>
+
+            var i = 0;
+            var y = '';
+
+            function setIntervalValue() {
+                y = setInterval(() => {
+                    i++;
+                    console.log(i);
+                    // console.log("This is an interval message!");
+                }, 2000);
+            }
+
+            function clearIntervalValue() {
+                i = 0;
+                clearInterval(y);
+            }
+
+
+            // function showAlert() {
+            //     console.log("This is an alert message!");
+            // }
+
+            // showAlert();
+
+            // setTimeout(showAlert, 5000);
+
+
+            // setTimeout(() => {
+            //     console.log("This is an alert message!");
+            // }, 5000);
+
+            var x= '';
+
+            function showValue() {
+                x = setTimeout(() => {
+                    console.log("This is an alert message!");
+                }, 3000);
+            }
+
+            function clearValue(){
+                clearTimeout(x);
+            }
+        </script>
+    </body>
+</html>

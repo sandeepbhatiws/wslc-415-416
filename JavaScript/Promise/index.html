@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Promises</title>
+    </head>
+    <body>
+
+
+
+        <script>
+            // var output = fetch('https://dummyjson.com/products');
+
+            // new Promise((complete, incomplete) => {
+            //     complete(output);
+            //     incomplete(output);
+            // })
+            // .then((result) => {
+            //     // console.log('Promise Result:', result.json());
+            //     // console.log('Promise Complete');
+
+            //     new Promise((resolve, reject) => {
+            //         resolve(result.json());
+            //     }).then((data) => {
+            //         console.log('Promise Result:', data.products);
+            //         console.log('Promise Complete');
+            //     })
+            // })
+            // .catch(() => {
+            //     console.log('Promise Incomplete');
+            // });
+
+
+            // console.log(output)
+
+
+            const getData = async() => {
+                var output = await fetch('https://dummyjson.com/products');
+                var output = await output.json();
+                console.log(output.products)
+            };
+
+            getData();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Largest Elements</title>
+    </head>
+    <body>
+
+
+
+        <script>
+            var numbers = [6,34,45,67,43,78,23,43,12];
+            var largest = numbers[0];
+
+            for(var index in numbers){
+                // console.log(numbers[index]);
+
+                if(numbers[index] > largest){
+                    largest = numbers[index];
+                    console.log(numbers[index]);
+                }
+            }
+
+            document.write('Largest - '+ largest);
+        </script>
+    </body>
+</html>
