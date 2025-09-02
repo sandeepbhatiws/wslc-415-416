@@ -1,0 +1,15 @@
+
+#root{
+    margin: auto;
+    text-align: center;
+}
+
+.counter{
+    margin-top: 250px;
+}
+.counter button{
+    padding: 15px 25px;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+}
