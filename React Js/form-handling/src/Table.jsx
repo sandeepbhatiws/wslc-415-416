@@ -1,6 +1,19 @@
 import React from 'react'
 
-export default function Table({userData }) {
+export default function Table({userData, setUserData }) {
+
+    const deleteUser = (index) => {
+        if(confirm('Are you sure you want to delete ?')){
+               const filterUser = userData.filter((v,i) => {
+                    if(i != index){
+                        return v;
+                    }
+               })
+               setUserData(filterUser);
+               localStorage.setItem('userData',JSON.stringify(filterUser));
+        }
+    }
+
     return (
         <>
             <div class="table-container">
@@ -25,12 +38,12 @@ export default function Table({userData }) {
                                     return(
                                         <tr>
                                             <td>{ i+1 }</td>
-                                            <td>test</td>
-                                            <td>tes@gmail.com</td>
-                                            <td>123456789</td>
-                                            <td>India</td>
-                                            <td>India</td>
-                                            <td><button> Delete </button></td>
+                                            <td>{ v.name }</td>
+                                            <td>{ v.email }</td>
+                                            <td>{ v.mobile_number }</td>
+                                            <td>{ v.country_name }</td>
+                                            <td>{ v.state_name }</td>
+                                            <td><button onClick={ () => deleteUser(i) }> Delete </button></td>
                                         </tr>
                                     )
                                 })                                

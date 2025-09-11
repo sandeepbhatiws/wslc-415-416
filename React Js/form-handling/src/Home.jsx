@@ -4,14 +4,17 @@ import Form from './Form'
 
 export default function Home() {
 
-    const [userData, setUserData] = useState([1,1,2]);
+    var userDatas = localStorage.getItem('userData');
+    var userDatas = JSON.parse(userDatas);
+
+    // const [userData, setUserData] = useState(userDatas ? userDatas : []);
+    const [userData, setUserData] = useState(userDatas ?? []);
 
     return (
-        <>
-            
+        <>  
             <Form userData={userData} setUserData={setUserData}/>
 
-            <Table userData={userData}/>
+            <Table userData={userData} setUserData={setUserData}/>
             
         </>
     )

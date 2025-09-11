@@ -27,8 +27,11 @@ export default function Form({userData, setUserData}) {
 
         const finalData = [data, ...userData];
         setUserData(finalData);
+        localStorage.setItem('userData',JSON.stringify(finalData));
 
-        console.log(data);
+        e.target.reset();
+        setStates([]);
+
     }
 
     return (
