@@ -7,9 +7,19 @@ import { toast, ToastContainer } from 'react-toastify';
 export default function ProductListing() {
 
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [filterCategories, setFilterCategories] = useState([]);
 
     useEffect(() => {
-        axios.get('https://wscubetech.co/ecommerce-api/products.php?limit=12')
+        // axios.get('https://wscubetech.co/ecommerce-api/products.php?limit=12&categories=furniture,home-decoration')
+
+        axios.get('https://wscubetech.co/ecommerce-api/products.php',{
+            params : {
+                page : 1,
+                limit : 24,
+                categories : filterCategories.toString()
+            }
+        })
         .then((result) => {
             setProducts(result.data.data);
         })
@@ -18,7 +28,38 @@ export default function ProductListing() {
 
             });
         })
+    },[filterCategories]);
+
+    useEffect(() => {
+        axios.get('https://wscubetech.co/ecommerce-api/categories.php')
+        .then((result) => {
+            setCategories(result.data.data);
+        })
+        .catch(() => {
+            toast.error('Something went wrong !')
+        })
     },[]);
+
+    const filterCategory = (slug) => {
+
+        if(filterCategories.includes(slug)){
+             const data = filterCategories.filter((v) => {
+                if(v != slug){
+                    return v;
+                }
+             })
+
+            setFilterCategories(data)
+            console.log(data);
+        } else {
+            const data = [...filterCategories, slug];
+
+            setFilterCategories(data)
+            console.log(data);
+        }
+
+        
+    }
 
     return (
         <>
@@ -39,16 +80,18 @@ export default function ProductListing() {
                             <div class="sidebar__inner ">
                                 <div class="filter-body">
                                     <div>
-                                        <h2 class="border-bottom filter-title">Seating Options</h2>
+                                        <h2 class="border-bottom filter-title">All Categories</h2>
                                         <div class="mb-30 filter-options">
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Indoor" checked />
-                                                <label class="custom-control-label" for="Indoor">Indoor</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Outdoor" />
-                                                <label class="custom-control-label" for="Outdoor">Outdoor</label>
-                                            </div>
+                                            {
+                                                categories.map((v,i) => {
+                                                    return(
+                                                        <div class="custom-control custom-checkbox mb-3" key={i} >
+                                                            <input type="checkbox" class="custom-control-input me-2" onClick={ () => filterCategory(v.slug) } id={v.id} />
+                                                            <label class="custom-control-label" for={v.id}>{v.name}</label>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
                                         </div>
                                         {/* <!--seating option end--> */}
                                         <h2 class="font-xbold body-font border-bottom filter-title">Cuisines</h2>
