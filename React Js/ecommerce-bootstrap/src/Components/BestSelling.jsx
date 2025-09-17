@@ -20,6 +20,9 @@ export default function BestSelling() {
         })
     },[]);
 
+
+    const [cartItems, setCartItems] = useState([]);
+
     return (
         <>
             <div className='container-fluid'>
@@ -31,7 +34,7 @@ export default function BestSelling() {
                         {
                             products.map((items, index) => {
                                 return(
-                                    <ProductCard key={index} items={items} type="1" />
+                                    <ProductCard key={index} items={items} type="1" cartItems={cartItems} setCartItems={setCartItems} />
                                 )
                             })
                         }

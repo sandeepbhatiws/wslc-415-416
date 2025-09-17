@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import ProductCard from './ProductCard'
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import ResponsivePagination from 'react-responsive-pagination';
+import 'react-responsive-pagination/themes/classic-light-dark.css';
 
 export default function ProductListing() {
 
@@ -10,44 +12,59 @@ export default function ProductListing() {
     const [categories, setCategories] = useState([]);
     const [filterCategories, setFilterCategories] = useState([]);
 
+    const [brands, setBrands] = useState([]);
+    const [filterBrands, setFilterBrands] = useState([]);
+
+    const [priceFrom, setPriceFrom] = useState('');
+    const [priceTo, setPriceTo] = useState('');
+    const [sorting, setSorting] = useState('');
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
     useEffect(() => {
         // axios.get('https://wscubetech.co/ecommerce-api/products.php?limit=12&categories=furniture,home-decoration')
 
-        axios.get('https://wscubetech.co/ecommerce-api/products.php',{
-            params : {
-                page : 1,
-                limit : 24,
-                categories : filterCategories.toString()
+        axios.get('https://wscubetech.co/ecommerce-api/products.php', {
+            params: {
+                page: currentPage,
+                limit: 24,
+                sorting: sorting,
+                price_from: priceFrom,
+                price_to: priceTo,
+                categories: filterCategories.toString(),
+                brands: filterBrands.toString(),
             }
         })
-        .then((result) => {
-            setProducts(result.data.data);
-        })
-        .catch(() => {
-            toast.error('Something went wrong !',{
+            .then((result) => {
+                setProducts(result.data.data);
+                setTotalPages(result.data.total_pages);
+            })
+            .catch(() => {
+                toast.error('Something went wrong !', {
 
-            });
-        })
-    },[filterCategories]);
+                });
+            })
+    }, [filterCategories, filterBrands, priceFrom, sorting, currentPage, totalPages]);
 
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/categories.php')
-        .then((result) => {
-            setCategories(result.data.data);
-        })
-        .catch(() => {
-            toast.error('Something went wrong !')
-        })
-    },[]);
+            .then((result) => {
+                setCategories(result.data.data);
+            })
+            .catch(() => {
+                toast.error('Something went wrong !')
+            })
+    }, []);
 
     const filterCategory = (slug) => {
 
-        if(filterCategories.includes(slug)){
-             const data = filterCategories.filter((v) => {
-                if(v != slug){
+        if (filterCategories.includes(slug)) {
+            const data = filterCategories.filter((v) => {
+                if (v != slug) {
                     return v;
                 }
-             })
+            })
 
             setFilterCategories(data)
             console.log(data);
@@ -58,12 +75,51 @@ export default function ProductListing() {
             console.log(data);
         }
 
-        
+
+    }
+
+    useEffect(() => {
+        axios.get('https://wscubetech.co/ecommerce-api/brands.php')
+            .then((result) => {
+                setBrands(result.data.data);
+            })
+            .catch(() => {
+                toast.error('Something went wrong !')
+            })
+    }, []);
+
+    const filterBrand = (slug) => {
+
+        if (filterBrands.includes(slug)) {
+            const data = filterBrands.filter((v) => {
+                if (v != slug) {
+                    return v;
+                }
+            })
+
+            setFilterBrands(data)
+            console.log(data);
+        } else {
+            const data = [...filterBrands, slug];
+
+            setFilterBrands(data)
+            console.log(data);
+        }
+
+
+    }
+
+    const priceFilter = (from, to) => {
+        setPriceFrom(from)
+        setPriceTo(to)
+    }
+
+    const filterSorting = (sort) => {
+        setSorting(sort)
     }
 
     return (
         <>
-            <Header />
 
             <div class="overlay d-none"></div>
             <div class="search-section">
@@ -83,10 +139,10 @@ export default function ProductListing() {
                                         <h2 class="border-bottom filter-title">All Categories</h2>
                                         <div class="mb-30 filter-options">
                                             {
-                                                categories.map((v,i) => {
-                                                    return(
+                                                categories.map((v, i) => {
+                                                    return (
                                                         <div class="custom-control custom-checkbox mb-3" key={i} >
-                                                            <input type="checkbox" class="custom-control-input me-2" onClick={ () => filterCategory(v.slug) } id={v.id} />
+                                                            <input type="checkbox" class="custom-control-input me-2" onClick={() => filterCategory(v.slug)} id={v.id} />
                                                             <label class="custom-control-label" for={v.id}>{v.name}</label>
                                                         </div>
                                                     )
@@ -94,40 +150,22 @@ export default function ProductListing() {
                                             }
                                         </div>
                                         {/* <!--seating option end--> */}
-                                        <h2 class="font-xbold body-font border-bottom filter-title">Cuisines</h2>
-                                        <div class="mb-3 filter-options" id="cusine-options">
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Chinese" checked />
-                                                <label class="custom-control-label" for="Chinese">Chinese</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Italian" />
-                                                <label class="custom-control-label" for="Italian">Italian</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Mexican" />
-                                                <label class="custom-control-label" for="Mexican">Mexican</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Thai" />
-                                                <label class="custom-control-label" for="Thai">Thai</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Gujarati" />
-                                                <label class="custom-control-label" for="Gujarati">Gujarati</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Panjabi" />
-                                                <label class="custom-control-label" for="Panjabi">Panjabi</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="South-Indian" />
-                                                <label class="custom-control-label" for="South-Indian">South Indian</label>
-                                            </div>
+                                        <h2 class="border-bottom filter-title">All Brands</h2>
+                                        <div class="mb-30 filter-options">
+                                            {
+                                                brands.map((v, i) => {
+                                                    return (
+                                                        <div class="custom-control custom-checkbox mb-3" key={i} >
+                                                            <input type="checkbox" class="custom-control-input me-2" onClick={() => filterBrand(v.slug)} id={v.slug} />
+                                                            <label class="custom-control-label" for={v.slug}>{v.name}</label>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
                                         </div>
 
                                         {/* <!-- cusine filters end --> */}
-                                        <h2 class="font-xbold body-font border-bottom filter-title">Price Range</h2>
+                                        {/* <h2 class="font-xbold body-font border-bottom filter-title">Price Range</h2>
                                         <div class="mb-3 theme-clr xs2-font d-flex justify-content-between">
                                             <span id="slider-range-value1">$100</span>
                                             <span id="slider-range-value2">$10,000</span>
@@ -142,32 +180,28 @@ export default function ProductListing() {
                                                     </form>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <h2 class="border-bottom filter-title">Services</h2>
+                                        </div> */}
+                                        <h2 class="border-bottom filter-title">Price Filter</h2>
                                         <div class="mb-3 filter-options" id="services-options">
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Breakfast" checked />
-                                                <label class="custom-control-label" for="Breakfast">Breakfast</label>
+                                                <input type="radio" name='price' class="custom-control-input me-2" onClick={() => priceFilter(0, 250)} id="Breakfast" />
+                                                <label class="custom-control-label" for="Breakfast">Rs.0 - Rs.250</label>
                                             </div>
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Lunch" />
-                                                <label class="custom-control-label" for="Lunch">Lunch</label>
+                                                <input type="radio" name='price' class="custom-control-input me-2" onClick={() => priceFilter(251, 500)} id="Lunch" />
+                                                <label class="custom-control-label" for="Lunch">Rs.251 - Rs.500</label>
                                             </div>
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Donner" />
-                                                <label class="custom-control-label" for="Donner">Donner</label>
+                                                <input type="radio" name='price' class="custom-control-input me-2" onClick={() => priceFilter(551, 750)} id="Donner" />
+                                                <label class="custom-control-label" for="Donner">Rs.551 - Rs.750</label>
                                             </div>
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Cafe" />
-                                                <label class="custom-control-label" for="Cafe">Cafe</label>
+                                                <input type="radio" name='price' class="custom-control-input me-2" onClick={() => priceFilter(751, 1000)} id="Cafe" />
+                                                <label class="custom-control-label" for="Cafe">Rs.751 - Rs.1000</label>
                                             </div>
                                             <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="Brunch" />
-                                                <label class="custom-control-label" for="Brunch">Brunch</label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3">
-                                                <input type="checkbox" class="custom-control-input" id="other" />
-                                                <label class="custom-control-label" for="other">Other</label>
+                                                <input type="radio" name='price' class="custom-control-input me-2" onClick={() => priceFilter(1000, '')} id="Brunch" />
+                                                <label class="custom-control-label" for="Brunch">Rs.1000 and Above</label>
                                             </div>
                                         </div>
                                     </div>
@@ -185,31 +219,35 @@ export default function ProductListing() {
                                     <div class="d-flex align-items-center">
 
                                         <div class="dropdown position-relative sort-drop">
-                                            <button type="button" class="btn btn-transparent dropdown-toggle body-clr p-0 py-1 sm-font fw-400 sort-toggle" data-toggle="dropdown">
-                                                <span class="mr-2 d-md-none">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><path d="M0,0h24 M24,24H0" fill="none" /><path d="M7,6h10l-5.01,6.3L7,6z M4.25,5.61C6.27,8.2,10,13,10,13v6c0,0.55,0.45,1,1,1h2c0.55,0,1-0.45,1-1v-6 c0,0,3.72-4.8,5.74-7.39C20.25,4.95,19.78,4,18.95,4H5.04C4.21,4,3.74,4.95,4.25,5.61z" /><path d="M0,0h24v24H0V0z" fill="none" /></g></svg>
-                                                </span>
-                                                <span class="d-md-inline-block ml-md-2 font-semibold">Newest First</span>
+                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Sorting By -
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right p-0 no-caret">
-                                                <a class="dropdown-item selected" href="javascript:void(0)">Newest First</a>
-                                                <a class="dropdown-item" href="javascript:void(0)">Lowest First</a>
-                                                <a class="dropdown-item" href="javascript:void(0)">Highest First</a>
-                                            </div>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><button class="dropdown-item" type="button" onClick={() => filterSorting(1)} >ASC by Name (A-Z)</button></li>
+                                                <li><button class="dropdown-item" type="button" onClick={() => filterSorting(2)}>DESC by Name (Z-A)</button></li>
+                                                <li><button class="dropdown-item" type="button" onClick={() => filterSorting(3)}>ASC by Price (Low to High)</button></li>
+                                                <li><button class="dropdown-item" type="button" onClick={() => filterSorting(4)}>DESC by Price (High to Low)</button></li>
+                                            </ul>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
-                            <div class="row row-grid row-gap-3">
+                            <div class="row row-grid row-gap-3 mb-4">
                                 {
                                     products.map((items, index) => {
-                                        return(
+                                        return (
                                             <ProductCard key={index} items={items} type="2" />
                                         )
                                     })
                                 }
                             </div>
+
+                            <ResponsivePagination
+                                current={currentPage}
+                                total={totalPages}
+                                onPageChange={setCurrentPage}
+                            />
                         </div>
                     </div>
                 </div>
