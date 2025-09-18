@@ -6,12 +6,17 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import logo from '../assets/images/ws-cube-white-logo.svg'
 import { ToastContainer } from 'react-toastify';
 import { Link } from 'react-router';
+import Button from 'react-bootstrap/Button';
 
 export default function Header() {
+
+    const cartItems =  JSON.parse(localStorage.getItem('cartItems'));
+    const totalItems = cartItems ? cartItems.length : 0;
+
     return (
         <>
             <ToastContainer />
-            <div className='container-fluid p-0'>
+            <div className='container-fluid p-0 position-sticky top-0 z-1'>
                 <Navbar expand="lg" className="bg-primary">
                     <Container>
                         <Navbar.Brand>
@@ -49,6 +54,8 @@ export default function Header() {
                                 <Link to='/contact-us' className='mt-2 px-3 text-decoration-none text-black'>Contact Us</Link>
                             </Nav>
                         </Navbar.Collapse>
+
+                        <Button variant="warning">View Cart ({totalItems})</Button>
                     </Container>
                 </Navbar>
             </div>

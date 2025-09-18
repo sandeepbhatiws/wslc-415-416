@@ -20,8 +20,8 @@ export default function BestSelling() {
         })
     },[]);
 
-
-    const [cartItems, setCartItems] = useState([]);
+    const totalCartItems =  JSON.parse(localStorage.getItem('cartItems'));
+    const [cartItems, setCartItems] = useState(totalCartItems ?? []);
 
     return (
         <>
