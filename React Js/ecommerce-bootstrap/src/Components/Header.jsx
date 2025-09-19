@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,10 +7,11 @@ import logo from '../assets/images/ws-cube-white-logo.svg'
 import { ToastContainer } from 'react-toastify';
 import { Link } from 'react-router';
 import Button from 'react-bootstrap/Button';
+import { Context } from './ContextAPI';
 
 export default function Header() {
 
-    const cartItems =  JSON.parse(localStorage.getItem('cartItems'));
+    const {cartItems, isLogin} = useContext(Context);
     const totalItems = cartItems ? cartItems.length : 0;
 
     return (
@@ -55,7 +56,17 @@ export default function Header() {
                             </Nav>
                         </Navbar.Collapse>
 
-                        <Button variant="warning">View Cart ({totalItems})</Button>
+                        <Button variant="warning me-3">View Cart ({totalItems})</Button>
+
+
+                        {
+                            isLogin
+                            ?
+                                <Button variant="warning">My Account</Button>
+                            :
+                                <Button variant="warning">Login </Button>
+
+                        }
                     </Container>
                 </Navbar>
             </div>

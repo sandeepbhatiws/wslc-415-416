@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from './Header'
 import { useParams } from 'react-router'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Context } from './ContextAPI';
 
 export default function ProductDetails() {
 
@@ -31,6 +32,8 @@ export default function ProductDetails() {
     const changeImage = (getImage) => {
         setSingleImage(getImage);
     }
+
+    const { addToCart } = useContext(Context);
 
   return (
     <>
@@ -71,13 +74,12 @@ export default function ProductDetails() {
 
                     </div>
 
-
                     <div class="buttons d-flex my-5">
                         <div class="block">
                             <a href="#" class="shadow btn custom-btn ">Wishlist</a>
                         </div>
                         <div class="block">
-                            <button class="shadow btn custom-btn">Add to cart</button>
+                            <button class="shadow btn custom-btn" onClick={ () => addToCart(productDetails)}>Add to cart</button>
                         </div>
 
                         <div class="block quantity">

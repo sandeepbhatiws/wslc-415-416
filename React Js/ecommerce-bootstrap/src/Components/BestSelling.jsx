@@ -20,9 +20,6 @@ export default function BestSelling() {
         })
     },[]);
 
-    const totalCartItems =  JSON.parse(localStorage.getItem('cartItems'));
-    const [cartItems, setCartItems] = useState(totalCartItems ?? []);
-
     return (
         <>
             <div className='container-fluid'>
@@ -34,7 +31,7 @@ export default function BestSelling() {
                         {
                             products.map((items, index) => {
                                 return(
-                                    <ProductCard key={index} items={items} type="1" cartItems={cartItems} setCartItems={setCartItems} />
+                                    <ProductCard key={index} items={items} type="1" />
                                 )
                             })
                         }
