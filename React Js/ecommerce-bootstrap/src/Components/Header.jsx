@@ -56,8 +56,9 @@ export default function Header() {
                             </Nav>
                         </Navbar.Collapse>
 
-                        <Button variant="warning me-3">View Cart ({totalItems})</Button>
-
+                        <Link to={ `view-carts` }>
+                            <Button variant="warning me-3">View Cart ({totalItems})</Button>
+                        </Link>
 
                         {
                             isLogin

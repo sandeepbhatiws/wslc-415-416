@@ -11,6 +11,7 @@ import AboutUs from './Components/AboutUs';
 import ProductDetails from './Components/ProductDetails';
 import RootLayout from './Components/RootLayout';
 import ContactUs from './Components/ContactUs';
+import ViewCart from './Components/ViewCart';
 
 createRoot(document.getElementById('root')).render(
   <>
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/about-us' element={<AboutUs />} />
           <Route path='/product-details/:id' element={<ProductDetails />} />
           <Route path='/contact-us' element={<ContactUs />} />
+          <Route path='/view-carts' element={<ViewCart />} />
         </Route>
 
         <Route path='admin-panel' element={<RootLayout />}>
