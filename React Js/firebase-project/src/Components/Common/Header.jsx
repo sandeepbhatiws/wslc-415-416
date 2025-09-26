@@ -5,7 +5,12 @@ import { ToastContainer } from 'react-toastify';
 
 export default function Header() {
 
-    const { isLogin } = useContext(Context);
+    const { isLogin, setIsLogin } = useContext(Context);
+
+    const logout = () => {
+        setIsLogin(0);
+        localStorage.removeItem('user_login');
+    }
 
     return (
         <>
@@ -44,7 +49,7 @@ export default function Header() {
                                                 {
                                                     isLogin == 1
                                                         ?
-                                                        <button type="button" class="btn btn-secondary">Logout</button>
+                                                        <button onClick={ logout } type="button" class="btn btn-secondary">Logout</button>
                                                         :
                                                         <>
                                                             <Link to={`/login`}>
