@@ -73,6 +73,38 @@ const filters = [
     },
 ]
 
+const priceValues = [
+    { from : 0, to: 250, name : 'Rs.0 - Rs.250' },
+    { from : 251, to: 500, name : 'Rs.251 - Rs.500' },
+    { from : 501, to: 750, name : 'Rs.501 - Rs.750' },
+    { from : 751, to: 1000, name : 'Rs.751 - Rs.1000' },
+    { from : 1001, to: 2000, name : 'Rs.1001 - Rs.2000' },
+    { from : 2001, to: 5000, name : 'Rs.2001 - Rs.5000' },
+    { from : 5001, to: 10000, name : 'Rs.5001 - Rs.10000' },
+    { from : 10001, to: 2000000000, name : 'Rs.10001 and Above' }
+]
+
+const discountedValues = [
+    { from : 1, to: 10, name : '0% - 10%' },
+    { from : 11, to: 20, name : '11% - 20%' },
+    { from : 21, to: 30, name : '21% - 30%' },
+    { from : 31, to: 40, name : '31% - 40%' },
+    { from : 41, to: 50, name : '41% - 50%' },
+    { from : 51, to: 60, name : '51% - 60%' },
+    { from : 61, to: 70, name : '61% - 70%' },
+    { from : 71, to: 80, name : '71% - 80%' },
+    { from : 81, to: 90, name : '81% - 90%' },
+    { from : 91, to: 100, name : '91% - 100%' }
+]
+
+const ratingValues = [
+    { value : 1, name : '1 Star and Above' },
+    { value : 2, name : '2 Star and Above' },
+    { value : 3, name : '3 Star and Above' },
+    { value : 4, name : '4 Star and Above' },
+    { value : 5, name : '5 Star' }
+]
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -179,6 +211,23 @@ export default function ProductListing() {
             const data = [...filterBrands, slug];
             setFilterBrands(data)
         }
+    }
+
+
+    const priceFilter = (from, to) => {
+        setPriceFrom(from)
+        setPriceTo(to)
+        setCurrentPage(1)
+    }
+
+    const discountedFilter = (from, to) => {
+        setDiscountFrom(from)
+        setDiscountTo(to)
+        setCurrentPage(1)
+    }
+
+    const ratingFilter = (rate) => {
+        setRating(rate);
     }
 
     return (
@@ -451,6 +500,72 @@ export default function ProductListing() {
                                                         </div>
                                                         :
                                                         ''
+                                                ))}
+                                            </div>
+                                        </DisclosurePanel>
+                                    </Disclosure>
+
+                                    <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                        <h3 className="-my-3 flow-root">
+                                            <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                <span className="font-medium text-gray-900">Price Filter</span>
+                                                <span className="ml-6 flex items-center">
+                                                    <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
+                                                    <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                                                </span>
+                                            </DisclosureButton>
+                                        </h3>
+                                        <DisclosurePanel className="pt-6">
+                                            <div className="space-y-4">
+                                                {priceValues.map((option, optionIdx) => (
+                                                    <div key={optionIdx} class="flex items-center gap-x-3">
+                                                        <input onClick={ () => priceFilter(option.from,option.to) } id={option.from} type="radio" name="price-filter" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                                                        <label for={option.from} class="block text-sm/6 font-medium text-gray-900">{option.name}</label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </DisclosurePanel>
+                                    </Disclosure>
+
+                                    <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                        <h3 className="-my-3 flow-root">
+                                            <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                <span className="font-medium text-gray-900">Discounted Filter</span>
+                                                <span className="ml-6 flex items-center">
+                                                    <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
+                                                    <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                                                </span>
+                                            </DisclosureButton>
+                                        </h3>
+                                        <DisclosurePanel className="pt-6">
+                                            <div className="space-y-4">
+                                                {discountedValues.map((option, optionIdx) => (
+                                                    <div key={optionIdx} class="flex items-center gap-x-3">
+                                                        <input onClick={ () => discountedFilter(option.from,option.to) } id={option.from} type="radio" name="discount-filter" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                                                        <label for={option.from} class="block text-sm/6 font-medium text-gray-900">{option.name}</label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </DisclosurePanel>
+                                    </Disclosure>
+
+                                    <Disclosure as="div" className="border-b border-gray-200 py-6">
+                                        <h3 className="-my-3 flow-root">
+                                            <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                                <span className="font-medium text-gray-900">Rating Filter</span>
+                                                <span className="ml-6 flex items-center">
+                                                    <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
+                                                    <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                                                </span>
+                                            </DisclosureButton>
+                                        </h3>
+                                        <DisclosurePanel className="pt-6">
+                                            <div className="space-y-4">
+                                                {ratingValues.map((option, optionIdx) => (
+                                                    <div key={optionIdx} class="flex items-center gap-x-3">
+                                                        <input onClick={ () => ratingFilter(option.value) } id={option.value} type="radio" name="rating-filter" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden" />
+                                                        <label for={option.value} class="block text-sm/6 font-medium text-gray-900">{option.name}</label>
+                                                    </div>
                                                 ))}
                                             </div>
                                         </DisclosurePanel>
