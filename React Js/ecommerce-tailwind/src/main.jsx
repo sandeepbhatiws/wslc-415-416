@@ -5,18 +5,24 @@ import './assets/css/style.css';
 import RootLayout from "./Components/RootLayout";
 import Home from "./Components/Home";
 import ProductListing from "./Components/ProductListing";
+import { Provider } from "react-redux";
+import { reduxToolkit } from "./Components/Redux Toolkit/ReduxToolkit";
 
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
   <BrowserRouter>
+
+    <Provider store={ reduxToolkit }>
       <Routes>
-        
-        <Route element={<RootLayout/>}>
-            <Route path="/" element={<Home/>} />
-            <Route path="products" element={<ProductListing/>} />
+
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="products" element={<ProductListing />} />
         </Route>
 
       </Routes>
+    </Provider>
+
   </BrowserRouter>,
 );
