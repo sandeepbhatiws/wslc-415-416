@@ -8,6 +8,7 @@ import ProductListing from "./Components/ProductListing";
 import { Provider } from "react-redux";
 import { reduxToolkit } from "./Components/Redux Toolkit/ReduxToolkit";
 import ViewCart from "./Components/ViewCart";
+import ProductDetails from "./Components/ProductDetails";
 
 const root = document.getElementById("root");
 
@@ -21,6 +22,7 @@ ReactDOM.createRoot(root).render(
           <Route path="/" element={<Home />} />
           <Route path="products" element={<ProductListing />} />
           <Route path="view-carts" element={<ViewCart />} />
+          <Route path="/product-details/:id" element={<ProductDetails />} />
         </Route>
 
       </Routes>
