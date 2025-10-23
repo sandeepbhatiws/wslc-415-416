@@ -1,11 +1,17 @@
 import Link from 'next/link';
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 
 export default function Header() {
 
-    const isLogin = 1;
-    const totalCarts = [];
+    const isLogin = useSelector((data) => {
+        return data.login.isLogin;
+    })
+
+    const totalCarts = useSelector((data) => {
+        return data.cart.cartItems;
+    })
 
     return (
         <>
@@ -13,7 +19,7 @@ export default function Header() {
             <nav class="bg-white dark:bg-gray-900 sticky w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                        <img src="/download.jpg" class="h-8" alt="Flowbite Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
                     </Link>
                     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
