@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
-var cartData = localStorage.getItem('cartItems');
-var cartData = JSON.parse(cartData);
-
-var cartData = [];
+var cartData = Cookies.get('cartItems');
+var cartData = cartData ? JSON.parse(cartData) : [];
 
 const initialState = {
   cartItems: cartData ?? [],
@@ -25,7 +24,7 @@ export const cartSlice = createSlice({
       })
 
       state.cartItems = finalData;
-      localStorage.setItem('cartItems', JSON.stringify(finalData));
+      Cookies.set('cartItems', JSON.stringify(finalData));
     },
     decrement: (state, action) => {
       const finalData = state.cartItems.map((v, i) => {
@@ -38,7 +37,7 @@ export const cartSlice = createSlice({
       })
 
       state.cartItems = finalData;
-      localStorage.setItem('cartItems', JSON.stringify(finalData));
+      Cookies.set('cartItems', JSON.stringify(finalData));
     },
     removeCart: (state, action) => {
       if (confirm('Are you sure you want to delete ?')) {
@@ -51,7 +50,7 @@ export const cartSlice = createSlice({
         })
 
         state.cartItems = finalData;
-        localStorage.setItem('cartItems', JSON.stringify(finalData));
+        Cookies.set('cartItems', JSON.stringify(finalData));
       }
     },
     addToCart: (state, action) => {
@@ -76,7 +75,7 @@ export const cartSlice = createSlice({
         })
 
         state.cartItems = finalData;
-        localStorage.setItem('cartItems', JSON.stringify(finalData));
+        Cookies.set('cartItems', JSON.stringify(finalData));
         toast.success('Update cart succussfully !');
       } else {
         const data = {
@@ -90,7 +89,7 @@ export const cartSlice = createSlice({
 
         const finalData = [data, ...state.cartItems];
         state.cartItems = finalData;
-        localStorage.setItem('cartItems', JSON.stringify(finalData));
+        Cookies.set('cartItems', JSON.stringify(finalData));
         toast.success('Add to cart succussfully !');
       }
     },

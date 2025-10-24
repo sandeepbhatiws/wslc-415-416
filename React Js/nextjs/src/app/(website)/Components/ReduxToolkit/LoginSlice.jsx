@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import Cookies from 'js-cookie';
+
+Cookies.set('isLogin', 1);
 
 const initialState = {
   isLogin: 0,
