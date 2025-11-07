@@ -4,9 +4,9 @@ const mongodb = require('mongodb');
 exports.create = async(request, response) => {
     try {
         const db = await database();
-        db.collection('colors').insertOne({
-            name : request.query.color_name,
-            code : request.query.color_code
+        db.collection('materails').insertOne({
+            name : request.body.name,
+            image : request.body.image
         })
         .then((result) => {
             const data = {
@@ -40,7 +40,7 @@ exports.create = async(request, response) => {
 exports.view = async (request, response) => {
     try {
         const db = await database();
-        db.collection('colors').find().toArray()
+        db.collection('materails').find().toArray()
         .then((result) => {
             if(result.length > 0){
                 const data = {
@@ -84,7 +84,7 @@ exports.view = async (request, response) => {
 exports.details = async (request, response) => {
     try {
         const db = await database();
-        db.collection('colors').findOne({
+        db.collection('materails').findOne({
             _id : new mongodb.ObjectId(request.params.id)
         })
         .then((result) => {
@@ -131,12 +131,12 @@ exports.update = async(request, response) => {
     try {
         const db = await database();
 
-        db.collection('colors').updateOne({
+        db.collection('materails').updateOne({
             _id : new mongodb.ObjectId(request.params.id)
         },{
             $set : {
-                name : request.query.color_name,
-                code : request.query.color_code
+                name : request.body.name,
+                image : request.body.image
             }
         })
         .then((result) => {
@@ -172,7 +172,7 @@ exports.destroy = async(request, response) => {
     try {
         const db = await database();
 
-        db.collection('colors').deleteOne({
+        db.collection('materails').deleteOne({
             _id : new mongodb.ObjectId(request.params.id)
         })
         .then((result) => {
