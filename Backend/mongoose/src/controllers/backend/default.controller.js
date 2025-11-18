@@ -62,13 +62,24 @@ exports.view = async(request, response) => {
         }
     }
 
-    var total_records = await defaultModal.find({
-        deleted_at : null
-    }).countDocuments();
+    // var nameRegex = new RegExp(request.body.name,"i")
 
-    await defaultModal.find({
-        deleted_at : null
-    }).limit(limit).skip(skip).sort({
+    const filter ={
+        deleted_at : null,
+        // name : nameRegex,
+        // order : {
+        //     $gte : 3
+        // },
+        status : {
+            $type :8
+        }
+    }
+
+    var total_records = await defaultModal.find(filter).countDocuments();
+
+    await defaultModal.find(filter).limit(limit).skip(skip)
+    .select('name status order')
+    .sort({
         order : 'asc',
         _id : 'desc'
     })
