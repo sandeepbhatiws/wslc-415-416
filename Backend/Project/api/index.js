@@ -29,6 +29,7 @@ server.get('/', (request, response) => {
 
 // Backend URL
 require('./src/routes/backend/default.routes')(server);
+require('./src/routes/backend/material.routes')(server);
 
 
 

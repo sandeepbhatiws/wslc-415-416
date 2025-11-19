@@ -11,7 +11,7 @@ module.exports = server => {
 
     router.post('/details/:id', details);
 
-    router.post('/update/:id', update);
+    router.put('/update/:id', update);
 
     router.post('/change-status', changeStatus);
 

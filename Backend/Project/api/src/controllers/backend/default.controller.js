@@ -57,10 +57,12 @@ exports.view = async(request, response) => {
 
     const orCondition = [];
 
-    if(request.body.name != undefined){
-        if(request.body.name != ''){
-            name = new RegExp(request.body.name,"i")
-            andCondition.push({ name : name })
+    if(request.body){
+        if(request.body.name != undefined){
+            if(request.body.name != ''){
+                name = new RegExp(request.body.name,"i")
+                andCondition.push({ name : name })
+            }
         }
     }
 
@@ -192,8 +194,8 @@ exports.changeStatus = async(request, response) => {
         _id : request.body.ids
     }, [{
         $set : {
-            $not : {
-                status : $status
+            status : {
+                $not : "$status"
             }
         }
     }])
