@@ -1,34 +1,79 @@
-
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import Breadcrumb from "../../common/Breadcrumb";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Addmaterials() {
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
-  // update work
   const [updateIdState,setUpdateIdState]=useState(false)
-  let updateId=useParams().id
-  useEffect(()=>{
-    if(updateId==undefined){
+  const [materialDetails, setMaterialDetails]=useState('')
+  const navigate = useNavigate();
+
+  const params = useParams();
+
+  useEffect(() => {
+    if(params.id != '' && params.id != undefined){
+      setUpdateIdState(true)
+
+      axios.post(`http://localhost:5000/api/backend/materials/details/${params.id}`)
+      .then((result) => {
+          if (result.data._status == true) {
+              setMaterialDetails(result.data._data);
+          } else {
+              setMaterialDetails('');
+          }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !!')
+      })
+
+    } else {
       setUpdateIdState(false)
     }
-    else{
-      setUpdateIdState(true)
-    }
-  },[updateId])
+  },[params]);
 
- 
+  const formHandler = (event) => {
+    event.preventDefault();
+
+    const data = {
+      name : event.target.name.value,
+      order : event.target.order.value
+    }
+
+    if(params.id != '' && params.id != undefined){
+      // Update Record
+      axios.put(`http://localhost:5000/api/backend/materials/update/${params.id}`, data)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/material/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+
+    } else {
+      // Create Record
+      axios.post('http://localhost:5000/api/backend/materials/create', data)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/material/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+    }
+  };
 
   return (
     <section className="w-full">
@@ -38,7 +83,7 @@ export default function Addmaterials() {
           <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
             {updateIdState ? "Update Material" : "Add Material"}  
           </h3>
-          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className="border border-t-0 p-3 rounded-b-md border-slate-400">
+          <form onSubmit={ formHandler } autoComplete="off" className="border border-t-0 p-3 rounded-b-md border-slate-400">
             
               <div className="">
                 <div className="mb-5">
@@ -46,16 +91,16 @@ export default function Addmaterials() {
                     htmlFor="Name"
                     className="block  text-md font-medium text-gray-900"
                   >
-                    Category Name
+                    Material Name
                   </label>
                   <input
                     type="text"
-                    {...register("Name", { required: "Material name is required" })}
                     id="Name"
+                    name="name"
+                    defaultValue={ materialDetails.name }
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Material Name"
                   />
-                  {errors.Name && <p className="text-red-500">{errors.Name.message}</p>}
                 </div>
                 <div className="mb-5">
                   <label
@@ -66,12 +111,12 @@ export default function Addmaterials() {
                   </label>
                   <input
                     type="number"
-                    {...register("order", { required: "Order is required" })}
                     id="order"
+                    defaultValue={materialDetails.order}
+                    name="order"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Order"
                   />
-                  {errors.order && <p className="text-red-500">{errors.order.message}</p>}
                 </div>
               </div>
            

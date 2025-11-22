@@ -12,7 +12,7 @@ export default function Footer() {
   return (
   
 <footer className="bg-white border-t-2">
-    <div className="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+    {/* <div className="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
       <span className="text-sm text-gray-900 sm:text-center ">© {year} <a  className="hover:underline">WsCube Tech™</a>. All Rights Reserved.
     </span>
     <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 sm:mt-0">
@@ -21,7 +21,7 @@ export default function Footer() {
         </li>
         
     </ul>
-    </div>
+    </div> */}
 </footer>
 
   )
