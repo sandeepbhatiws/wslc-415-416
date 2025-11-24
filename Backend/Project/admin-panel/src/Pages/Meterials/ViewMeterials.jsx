@@ -22,7 +22,7 @@ export default function ViewMeterials() {
     const [apiStatus, setApiStatus]= useState(true);
 
     useEffect(() => {
-        axios.post('http://localhost:5000/api/backend/materials/view', {
+        axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }view`, {
             name : filterName,
             page : currentPage,
         })
@@ -87,13 +87,14 @@ export default function ViewMeterials() {
 
     const changeStatus = () => {
         if(checkBoxValues.length > 0){
-            axios.post('http://localhost:5000/api/backend/materials/change-status',{
+            axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }change-status`, {
                 ids : checkBoxValues
             })
             .then((result) => {
                 if(result.data._status == true){
                     setApiStatus(!apiStatus);
                     setCheckBoxValues([]);
+                    setFilterName('');
                     toast.success(result.data._message);
                 } else {
                     toast.error(result.data._message);
@@ -111,13 +112,14 @@ export default function ViewMeterials() {
         if(checkBoxValues.length > 0){
 
             if(confirm('Are you sure you want to delete ?')){
-                axios.post('http://localhost:5000/api/backend/materials/destroy',{
+                axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }destroy`, {
                     ids : checkBoxValues
                 })
                 .then((result) => {
                     if(result.data._status == true){
                         setApiStatus(!apiStatus);
                         setCheckBoxValues([]);
+                        setFilterName('')
                         toast.success(result.data._message);
                     } else {
                         toast.error(result.data._message);
@@ -146,6 +148,7 @@ export default function ViewMeterials() {
                                 <input
                                     type="text"
                                     name='name'
+                                    defaultValue={ filterName }
                                     id="simple-search"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Search Name"

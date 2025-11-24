@@ -86,7 +86,7 @@ exports.view = async(request, response) => {
     var total_records = await colorModal.find(filter).countDocuments();
 
     await colorModal.find(filter).limit(limit).skip(skip)
-    .select('name status order')
+    .select('name code status order')
     .sort({
         // order : 'asc',   in case of website
         _id : 'desc'

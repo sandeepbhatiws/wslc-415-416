@@ -16,7 +16,7 @@ export default function Addmaterials() {
     if(params.id != '' && params.id != undefined){
       setUpdateIdState(true)
 
-      axios.post(`http://localhost:5000/api/backend/materials/details/${params.id}`)
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }details/${params.id}`)
       .then((result) => {
           if (result.data._status == true) {
               setMaterialDetails(result.data._data);
@@ -43,7 +43,7 @@ export default function Addmaterials() {
 
     if(params.id != '' && params.id != undefined){
       // Update Record
-      axios.put(`http://localhost:5000/api/backend/materials/update/${params.id}`, data)
+      axios.put(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }update/${params.id}`, data)
       .then((result) => {
         if(result.data._status == true){
           event.target.reset();
@@ -59,7 +59,7 @@ export default function Addmaterials() {
 
     } else {
       // Create Record
-      axios.post('http://localhost:5000/api/backend/materials/create', data)
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_MATERIAL }create`, data)
       .then((result) => {
         if(result.data._status == true){
           event.target.reset();
