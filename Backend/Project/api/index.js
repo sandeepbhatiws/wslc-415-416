@@ -21,6 +21,9 @@ server.get('/', (request, response) => {
     response.send('<h1>Server is working fine.</h1>');
 })
 
+server.use('/uploads/colors', express.static('uploads/colors'));
+server.use('/uploads/categories', express.static('uploads/categories'));
+
 // Website URL
 
 
@@ -31,6 +34,7 @@ server.get('/', (request, response) => {
 require('./src/routes/backend/default.routes')(server);
 require('./src/routes/backend/material.routes')(server);
 require('./src/routes/backend/color.routes')(server);
+require('./src/routes/backend/category.routes')(server);
 
 
 
