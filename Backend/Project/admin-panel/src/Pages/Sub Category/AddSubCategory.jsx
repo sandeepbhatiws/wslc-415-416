@@ -1,43 +1,107 @@
 import React, { useEffect, useState } from "react";
-import $ from "jquery";
+import $, { param } from "jquery";
 import "dropify/dist/css/dropify.min.css";
 import "dropify/dist/js/dropify.min.js";
 import Breadcrumb from "../../common/Breadcrumb";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AddSubCategory() {
-  useEffect(() => {
-    $(".dropify").dropify({
-      messages: {
-        default: "Drag and drop ",
-        replace: "Drag and drop ",
-        remove: "Remove",
-        error: "Oops, something went wrong"
-      }
-    });
-  }, []);
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  const onSubmit = (data) => {
-    
-  };
-  // update work
-  const [updateIdState, setUpdateIdState] = useState(false)
-  let updateId = useParams().id
+  const [categories, setCategories] = useState([]);
+  const [subCategoryDetails, setSubCategoryDetails]=useState('')
+  const [imagePath, setImagePath]=useState('')
+  const navigate = useNavigate();
+  const params = useParams();
+  const [updateIdState,setUpdateIdState]=useState(false)
+
   useEffect(() => {
-    if (updateId == undefined) {
-      setUpdateIdState(false)
+    const dropifyElement = $("#image");
+
+    if (dropifyElement.data("dropify")) {
+      dropifyElement.data("dropify").destroy();
+      dropifyElement.removeData("dropify");
     }
-    else {
-      setUpdateIdState(true)
+
+    // **Force Update Dropify Input**
+    dropifyElement.replaceWith(
+      `<input type="file" accept="image/*" name="image" id="image"
+          class="dropify" data-height="250" data-default-file="${imagePath}"/>`
+    );
+
+    // **Reinitialize Dropify**
+    $("#image").dropify();
+
+  }, [imagePath]);
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_SUB_CATEGORY}view-categories`)
+    .then((result) => {
+      setCategories(result.data._data);
+    })
+    .catch(() => {
+      toast.error('Something went wrong !')
+    })
+  },[])
+
+  useEffect(() => {
+    if(params.id != '' && params.id != undefined){
+      setUpdateIdState(params.id);
+
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_SUB_CATEGORY }details/${params.id}`)
+      .then((result) => {
+          if (result.data._status == true) {
+              setSubCategoryDetails(result.data._data);
+              setImagePath(result.data._image_path+result.data._data.image)
+          } else {
+              setSubCategoryDetails('');
+          }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !!')
+      })
     }
-  }, [updateId])
+  },[params]);
+
+  const formHandler = (event) => {
+    event.preventDefault();
+
+    if(updateIdState != ''){
+      //Update API
+      axios.put(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_SUB_CATEGORY }update/${params.id}`, event.target)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/category/sub-category/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+
+
+    } else {
+      // Create API
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_SUB_CATEGORY }create`, event.target)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/category/sub-category/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+    }
+  };
 
   return (
     <section className="w-full">
@@ -45,9 +109,9 @@ export default function AddSubCategory() {
       <div className="w-full min-h-[610px]">
         <div className="max-w-[1220px] mx-auto py-5">
           <h3 className="text-[26px] font-semibold bg-slate-100 py-3 px-4 rounded-t-md border border-slate-400">
-            Add Sub Category
+            { updateIdState ? 'Update Sub Category' : 'Add Sub Category' }
           </h3>
-          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className="border border-t-0 p-3 rounded-b-md border-slate-400">
+          <form onSubmit={formHandler} autoComplete="off" className="border border-t-0 p-3 rounded-b-md border-slate-400">
             <div className="flex gap-5">
               <div className="w-1/3">
                 <label
@@ -59,12 +123,11 @@ export default function AddSubCategory() {
                 <input
                   type="file"
                   accept="image/*"
-                  {...register("categoryImage", { required: "Category image is required" })}
-                  id="categoryImage"
+                  name="image"
+                  id="image"
                   className="dropify"
                   data-height="230"
                 />
-                {errors.categoryImage && <p className="text-red-500">{errors.categoryImage.message}</p>}
               </div>
 
               <div className="w-2/3">
@@ -74,13 +137,20 @@ export default function AddSubCategory() {
                     Parent Category Name
                   </label>
                   <select
-                    name="parentCatSelectBox"
+                    name="parent_category_id"
                     className="border-2 border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                   >
                     <option value="">Select Category</option>
-                    <option value="Mens">Men's</option>
-                    <option value="Women">Women</option>
-                    <option value="Sale">Sale</option>
+                    {
+                      categories.map((v,i) => {
+                        return(
+                          <option value={v._id} selected={
+                            subCategoryDetails.parent_category_id == v._id ? 'selected' : ''
+                          } >{v.name}</option>
+                        )
+                      })
+                    }
+
                   </select>
                 </div>
 
@@ -93,12 +163,12 @@ export default function AddSubCategory() {
                   </label>
                   <input
                     type="text"
-                    {...register("categoryName", { required: "Category name is required" })}
+                    name="name"
+                    defaultValue={subCategoryDetails.name}
                     id="categoryName"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Category Name"
                   />
-                  {errors.categoryName && <p className="text-red-500">{errors.categoryName.message}</p>}
                 </div>
 
                 <div className="mb-5">
@@ -110,12 +180,12 @@ export default function AddSubCategory() {
                   </label>
                   <input
                     type="text"
-                    {...register("Order", { required: "Category Order is required" })}
+                    name="order"
+                    defaultValue={subCategoryDetails.order}
                     id="categoryName"
                     className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                     placeholder="Category Order"
                   />
-                  {errors.Order && <p className="text-red-500">{errors.Order.message}</p>}
                 </div>
                 
               </div>
@@ -129,8 +199,6 @@ export default function AddSubCategory() {
               {updateIdState ? "Update Sub Category" : "Add Sub Category"}
             </button>
           </form>
-
-
         </div>
       </div>
     </section>

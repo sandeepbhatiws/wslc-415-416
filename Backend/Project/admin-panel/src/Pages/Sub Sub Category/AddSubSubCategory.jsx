@@ -5,8 +5,48 @@ import "dropify/dist/js/dropify.min.js";
 import Breadcrumb from "../../common/Breadcrumb";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function AddSubSubCategory() {
+
+  const [parentCategory, setParentCategory] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_SUB_SUB_CATEGORY}view-categories`)
+      .then((result) => {
+        setCategories(result.data._data);
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+  }, [])
+
+  useEffect(() => {
+    if(parentCategory){
+        axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_SUB_SUB_CATEGORY}view-sub-categories`, {
+        parent_category_id: parentCategory
+      })
+        .then((result) => {
+          setSubCategories(result.data._data);
+        })
+        .catch(() => {
+          toast.error('Something went wrong !')
+        })
+    } else {
+      setSubCategories([]);
+    }
+    
+  }, [parentCategory])
+
+  const changeCategory = (event) => {
+    setParentCategory(event.target.value) 
+  }
+
+
+
+
   useEffect(() => {
     $(".dropify").dropify({
       messages: {
@@ -17,7 +57,7 @@ export default function AddSubSubCategory() {
       }
     });
   }, []);
-  
+
   const {
     register,
     handleSubmit,
@@ -25,7 +65,7 @@ export default function AddSubSubCategory() {
   } = useForm();
 
   const onSubmit = (data) => {
-    
+
   };
   // update work
   const [updateIdState, setUpdateIdState] = useState(false)
@@ -68,20 +108,25 @@ export default function AddSubSubCategory() {
               </div>
 
               <div className="w-2/3">
-                
+
                 {/* Parent Category Dropdown */}
                 <div className="mb-5">
                   <label className="block mb-5 text-md font-medium text-gray-900">
                     Parent Category Name
                   </label>
                   <select
+                    onClick={ changeCategory  }
                     name="parentCatSelectBox"
                     className="border-2 border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                   >
                     <option value="">Select Category</option>
-                    <option value="Mens">Men's</option>
-                    <option value="Women">Women</option>
-                    <option value="Sale">Sale</option>
+                    {
+                      categories.map((item, index) => {
+                        return (
+                          <option key={index} value={item._id}> {item.name} </option>
+                        )
+                      })
+                    }
                   </select>
                 </div>
                 {/* Parent Category Dropdown */}
@@ -94,9 +139,13 @@ export default function AddSubSubCategory() {
                     className="border-2 border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3"
                   >
                     <option value="">Select Category</option>
-                    <option value="Mens">Men's</option>
-                    <option value="Women">Women</option>
-                    <option value="Sale">Sale</option>
+                    {
+                      subCategories.map((item, index) => {
+                        return (
+                          <option key={index} value={item._id}> {item.name} </option>
+                        )
+                      })
+                    }
                   </select>
                 </div>
 

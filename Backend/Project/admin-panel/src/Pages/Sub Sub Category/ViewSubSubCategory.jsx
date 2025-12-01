@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Breadcrumb from '../../common/Breadcrumb'
 import { Link } from 'react-router-dom';
 import { MdFilterAltOff, MdModeEdit, MdModeEditOutline } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 import { FaFilter } from 'react-icons/fa';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 // import { MdModeEditOutline } from "react-icons/md";
 
 export default function ViewCategory() {
@@ -11,6 +13,29 @@ export default function ViewCategory() {
 
   let [activeFilter, setactiveFilter] = useState(true);
   let [activeDropDown, setactiveDropDown] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_SUB_SUB_CATEGORY}view-categories`)
+      .then((result) => {
+        setCategories(result.data._data);
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+  }, [])
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_SUB_SUB_CATEGORY}view-sub-categories`)
+      .then((result) => {
+        setSubCategories(result.data._data);
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+  }, [])
+
   return (
     <section className="w-full">
 
@@ -26,9 +51,13 @@ export default function ViewCategory() {
               className="border  border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-3"
             >
               <option value="">Select Parent Category</option>
-              <option value="Mens">Men's</option>
-              <option value="Women">Women</option>
-              <option value="Sale">Sale</option>
+              {
+                categories.map((item, index) => {
+                  return(
+                    <option key={index} value={item._id}> {item.name} </option>
+                  )
+                })
+              }
             </select>
           </div>
           <div className="">
@@ -38,9 +67,13 @@ export default function ViewCategory() {
               className="border  border-gray-300 text-gray-900  text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-3"
             >
               <option value="">Select Sub Category</option>
-              <option value="Mens">Men's</option>
-              <option value="Women">Women</option>
-              <option value="Sale">Sale</option>
+              {
+                subCategories.map((item, index) => {
+                  return(
+                    <option key={index} value={item._id}> {item.name} </option>
+                  )
+                })
+              }
             </select>
           </div>
           <div className="">
@@ -90,8 +123,8 @@ export default function ViewCategory() {
             </h3>
             <div className='flex justify-between '>
               <div onClick={() => setactiveFilter(!activeFilter)} className="cursor-pointer text-[white] mx-3 rounded-[50%] w-[40px] h-[40px]  mx-3 rounded-[50%] w-[40px] h-[40px] flex items-center justify-center  text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                              {activeFilter ? <FaFilter className='text-[18px]' /> : <MdFilterAltOff className='text-[18px]' />}
-                            </div>
+                {activeFilter ? <FaFilter className='text-[18px]' /> : <MdFilterAltOff className='text-[18px]' />}
+              </div>
 
               <button type="button" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"> Change Status</button>
               <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete </button>
@@ -114,7 +147,7 @@ export default function ViewCategory() {
                           <label for="checkbox-all-search" class="sr-only">checkbox</label>
                         </div>
                       </th>
-                     
+
                       <th scope="col" class="px-0 py-3">
                         Parent Category
                       </th>
@@ -122,7 +155,7 @@ export default function ViewCategory() {
                         Sub Category
                       </th>
                       <th scope="col" class="px-0 py-3">
-                      Category Name
+                        Category Name
                       </th>
                       <th scope="col" class=" w-[12%] ">
                         Image
@@ -148,7 +181,7 @@ export default function ViewCategory() {
                       </td>
                       <td scope="row" class=" px-6 py-4 text-gray-900 ">
 
-                      Men
+                        Men
                       </td>
                       <td class=" py-4">
                         Men
@@ -156,7 +189,7 @@ export default function ViewCategory() {
                       <td class=" py-4">
                         Shoe
                       </td>
-                      
+
                       <td class=" py-4">
                         <img class="w-10 h-10 rounded-full" src="https://packshifts.in/images/iso.png" alt="Jese image" />
                       </td>
@@ -165,7 +198,7 @@ export default function ViewCategory() {
                       </td>
                       <td class=" py-4">
 
-                      <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
+                        <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-1.5 text-center me-2 mb-2">Active</button>
                       </td>
                       <td class=" py-4">
 
@@ -178,7 +211,7 @@ export default function ViewCategory() {
                     </tr>
 
 
-                    
+
 
 
 
