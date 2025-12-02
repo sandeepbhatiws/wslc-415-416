@@ -23,6 +23,7 @@ server.get('/', (request, response) => {
 
 server.use('/uploads/colors', express.static('uploads/colors'));
 server.use('/uploads/categories', express.static('uploads/categories'));
+server.use('/uploads/products', express.static('uploads/products'));
 
 // Website URL
 
@@ -35,6 +36,7 @@ require('./src/routes/backend/default.routes')(server);
 require('./src/routes/backend/material.routes')(server);
 require('./src/routes/backend/color.routes')(server);
 require('./src/routes/backend/category.routes')(server);
+require('./src/routes/backend/product.routes')(server);
 require('./src/routes/backend/subCategory.routes')(server);
 require('./src/routes/backend/subSubCategory.routes')(server);
 
