@@ -1,5 +1,8 @@
 const productModal = require("../../models/product")
-var slugify = require('slugify')
+var slugify = require('slugify');
+const subSubCategoryModal = require("../../models/subSubCategory");
+const colorModal = require("../../models/color");
+const materialModal = require("../../models/material");
 
 const generateUniqueSlug = async (Model, baseSlug) => {
   let slug = baseSlug;
@@ -14,13 +17,201 @@ const generateUniqueSlug = async (Model, baseSlug) => {
   return slug;
 };
 
+exports.viewSubSubCategories = async(request, response) => {
+
+    const andCondition = [
+        {
+            deleted_at : null, 
+        }
+    ];
+
+    const orCondition = [{
+        status : 1
+    }];
+
+    if(request.body){
+        if(request.body.parent_category_id != undefined){
+            if(request.body.parent_category_id != ''){
+                andCondition.push({ parent_category_id : request.body.parent_category_id })
+            }
+        }
+
+        if(request.body.sub_category_id != undefined){
+            if(request.body.sub_category_id != ''){
+                andCondition.push({ sub_category_id : request.body.sub_category_id })
+            }
+        }
+    }
+
+    if(andCondition.length > 0){
+        var filter = { $and : andCondition }
+    } else {
+        var filter = {}
+    }
+
+    if(orCondition.length > 0){
+        filter.$or = orCondition;
+    }
+
+    await subSubCategoryModal.find(filter)
+    .select('name parent_category_id sub_category_id')
+    .sort({
+        _id : 'desc'
+    })
+    .then((result) => {
+        if(result.length > 0){
+            const data = {
+                _status : true,
+                _message : 'Record found successfully.',
+                _data : result
+            }
+
+            response.send(data);
+        } else {
+            const data = {
+                _status : false,
+                _message : 'No Record found.',
+                _data : result
+            }
+
+            response.send(data);
+        }
+    })
+    .catch((error) => {
+        const data = {
+            _status : false,
+            _message : 'Something went wrong',
+            _error : error,
+            _data : []
+        }
+
+        response.send(data);
+    })
+}
+
+exports.viewMaterials = async(request, response) => {
+
+    const andCondition = [
+        {
+            deleted_at : null, 
+        }
+    ];
+
+    const orCondition = [{
+        status : 1
+    }];
+
+    if(andCondition.length > 0){
+        var filter = { $and : andCondition }
+    } else {
+        var filter = {}
+    }
+
+    if(orCondition.length > 0){
+        filter.$or = orCondition;
+    }
+
+    await materialModal.find(filter)
+    .select('name')
+    .sort({
+        _id : 'desc'
+    })
+    .then((result) => {
+        if(result.length > 0){
+            const data = {
+                _status : true,
+                _message : 'Record found successfully.',
+                _data : result
+            }
+
+            response.send(data);
+        } else {
+            const data = {
+                _status : false,
+                _message : 'No Record found.',
+                _data : result
+            }
+
+            response.send(data);
+        }
+    })
+    .catch((error) => {
+        const data = {
+            _status : false,
+            _message : 'Something went wrong',
+            _error : error,
+            _data : []
+        }
+
+        response.send(data);
+    })
+}
+
+exports.viewColors = async(request, response) => {
+
+    const andCondition = [
+        {
+            deleted_at : null, 
+        }
+    ];
+
+    const orCondition = [{
+        status : 1
+    }];
+
+    if(andCondition.length > 0){
+        var filter = { $and : andCondition }
+    } else {
+        var filter = {}
+    }
+
+    if(orCondition.length > 0){
+        filter.$or = orCondition;
+    }
+
+    await colorModal.find(filter)
+    .select('name')
+    .sort({
+        _id : 'desc'
+    })
+    .then((result) => {
+        if(result.length > 0){
+            const data = {
+                _status : true,
+                _message : 'Record found successfully.',
+                _data : result
+            }
+
+            response.send(data);
+        } else {
+            const data = {
+                _status : false,
+                _message : 'No Record found.',
+                _data : result
+            }
+
+            response.send(data);
+        }
+    })
+    .catch((error) => {
+        const data = {
+            _status : false,
+            _message : 'Something went wrong',
+            _error : error,
+            _data : []
+        }
+
+        response.send(data);
+    })
+}
+
 exports.create = async (request, response) => {
 
     const saveData = request.body
 
-    if(request.file){
-        saveData.image = request.file.filename
-    }
+    // if(request.file){
+    //     saveData.image = request.file.filename
+    // }
 
     if(request.body != undefined){
         if(request.body.name != undefined || request.body.name != ''){
