@@ -299,7 +299,12 @@ exports.view = async(request, response) => {
     var total_records = await productModal.find(filter).countDocuments();
 
     await productModal.find(filter).limit(limit).skip(skip)
-    .select('name image slug status order')
+    // .select('name image slug status order')
+    .populate('material_id', 'name')
+    .populate('color_id', 'name')
+    .populate('parent_category_id', 'name')
+    .populate('sub_category_id', 'name')
+    .populate('sub_sub_category_id', 'name')
     .sort({
         // order : 'asc',   in case of website
         _id : 'desc'

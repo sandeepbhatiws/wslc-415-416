@@ -6,8 +6,110 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 export default function ProductDetails() {
+
+  const [parentCategories, setParentCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [subSubCategories, setSubSubCategories] = useState([]);
+  const [materials, setMaterials] = useState([]);
+  const [colors, setColors] = useState([]);
+
+  useEffect(() => {
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}colors`)
+      .then((result) => {
+        if (result.data._status == true) {
+          setColors(result.data._data);
+        } else {
+          setColors([]);
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}materials`)
+      .then((result) => {
+        if (result.data._status == true) {
+          setMaterials(result.data._data);
+        } else {
+          setMaterials([]);
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+
+    axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}view-categories`)
+      .then((result) => {
+        if (result.data._status == true) {
+          setParentCategories(result.data._data);
+        } else {
+          setParentCategories([]);
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong !')
+      })
+  }, [])
+
+  const [parentCategory, setParentCategory] = useState('');
+
+  const getParentCategory = (event) => {
+    setParentCategory(event.target.value);
+    setSubCategories([]);
+    setSubSubCategories([]);
+  }
+
+  useEffect(() => {
+    if(parentCategory != ''){
+      axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}view-sub-categories`, {
+        parent_category_id : parentCategory
+      })
+        .then((result) => {
+          if (result.data._status == true) {
+            setSubCategories(result.data._data);
+          } else {
+            setSubCategories([]);
+          }
+        })
+        .catch(() => {
+          toast.error('Something went wrong !')
+        })
+    }
+  }, [parentCategory])
+
+  const [subCategory, setSubCategory] = useState('');
+
+  const getSubCategory = (event) => {
+    setSubCategory(event.target.value);
+    setSubSubCategories([]);
+  }
+
+  useEffect(() => {
+    if(subCategory != ''){
+      axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}view-sub-sub-categories`, {
+        parent_category_id : parentCategory,
+        sub_category_id : subCategory
+      })
+        .then((result) => {
+          if (result.data._status == true) {
+            setSubSubCategories(result.data._data);
+          } else {
+            setSubSubCategories([]);
+          }
+        })
+        .catch(() => {
+          toast.error('Something went wrong !')
+        })
+    }
+  }, [subCategory])
+
+
+
+
+
 
   useEffect(() => {
     $(".dropify").dropify({
@@ -158,16 +260,20 @@ export default function ProductDetails() {
                   Select Sub Category
                 </label>
                 <select
-                  {...register("Sub_Category", { required: "Sub Category is required" })}
+                  onChange={ getSubCategory }
+                  name='sub_category_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
-                  <option value="">Select Category</option>
-                  <option value="mobile">Mobile Phones</option>
-                  <option value="laptop">Laptops</option>
-                  <option value="men">Men's Wear</option>
-                  <option value="women">Women's Wear</option>
+                  <option value="">Select Sub Category</option>
+
+                  {
+                    subCategories.map((v, i) => {
+                      return (
+                        <option value={v._id}>{v.name}</option>
+                      )
+                    })
+                  }
 
                 </select>
-                {errors.Sub_Category && <p className="text-red-500 text-sm">{errors.Sub_Category.message}</p>}
 
               </div>
 
@@ -179,20 +285,19 @@ export default function ProductDetails() {
                   Select Meterial
                 </label>
                 <select
-                  {...register("Meterial", { required: "Meterial is required" })}
+                  name='material_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
-                  <option value="">Nothing Selected</option>
-                  <option value="">Neem</option>
-                  <option value="">Babbul</option>
-                  <option value="">Neem</option>
-                  <option value="">Babbul</option>
-                  <option value="">Neem</option>
-                  <option value="">Babbul</option>
-                  <option value="">Neem</option>
-                  <option value="">Babbul</option>
 
+                  <option value="">Select Material</option>
+
+                  {
+                    materials.map((v, i) => {
+                      return (
+                        <option value={v._id}>{v.name}</option>
+                      )
+                    })
+                  }
                 </select>
-                {errors.Meterial && <p className="text-red-500 text-sm">{errors.Meterial.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -279,18 +384,20 @@ export default function ProductDetails() {
                   Select Parent Category
                 </label>
                 <select
-                  {...register("Parent_Category", { required: "Parent Category is required" })}
+                  onChange={ getParentCategory }
+                  name='parent_category_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
-                  <option value="">Nothing Selected</option>
+                  <option value="">Select Parent Category</option>
 
-                  <option value="mobile">Mobile Phones</option>
-                  <option value="laptop">Laptops</option>
-
-                  <option value="men">Men's Wear</option>
-                  <option value="women">Women's Wear</option>
+                  {
+                    parentCategories.map((v, i) => {
+                      return (
+                        <option value={v._id}>{v.name}</option>
+                      )
+                    })
+                  }
 
                 </select>
-                {errors.Parent_Category && <p className="text-red-500 text-sm">{errors.Parent_Category.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -301,18 +408,19 @@ export default function ProductDetails() {
                   Select Sub Sub Category
                 </label>
                 <select
-                  {...register("Sub_Sub_Category", { required: "Sub Sub Category is required" })}
+                  name='sub_sub_category_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
-                  <option value="">Nothing Selected</option>
+                  <option value="">Select Sub Sub Category</option>
 
-                  <option value="mobile">Mobile Phones</option>
-                  <option value="laptop">Laptops</option>
-
-                  <option value="men">Men's Wear</option>
-                  <option value="women">Women's Wear</option>
+                  {
+                    subSubCategories.map((v, i) => {
+                      return (
+                        <option value={v._id}>{v.name}</option>
+                      )
+                    })
+                  }
 
                 </select>
-                {errors.Sub_Sub_Category && <p className="text-red-500 text-sm">{errors.Sub_Sub_Category.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -323,18 +431,19 @@ export default function ProductDetails() {
                   Select Color
                 </label>
                 <select
-                  {...register("Color", { required: "Color is required" })}
+                  name='color_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
-                  <option value="">Nothing Selected</option>
+                  <option value="">Select Color</option>
 
-                  <option value="">Red</option>
-                  <option value="">Blue</option>
-
-                  <option value="">Green</option>
-                  <option value="">Gray</option>
+                  {
+                    colors.map((v, i) => {
+                      return (
+                        <option value={v._id}>{v.name}</option>
+                      )
+                    })
+                  }
 
                 </select>
-                {errors.Color && <p className="text-red-500 text-sm">{errors.Color.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -425,8 +534,8 @@ export default function ProductDetails() {
           )}
 
           <button class=" mt-5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 ">
-             {updateIdState ? "Update Product " : "Add Product"}
-             </button>
+            {updateIdState ? "Update Product " : "Add Product"}
+          </button>
 
         </form>
 
