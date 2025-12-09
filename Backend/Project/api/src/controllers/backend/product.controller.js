@@ -209,9 +209,19 @@ exports.create = async (request, response) => {
 
     const saveData = request.body
 
-    // if(request.file){
-    //     saveData.image = request.file.filename
-    // }
+    if(request.files){
+        if(request.files['image']){
+            saveData.image = request.files['image'][0].filename;
+        }
+
+        if(request.files['images']){
+            var allImages = [];
+            request.files['images'].forEach(element => {
+                allImages.push(element.filename);
+            });
+            saveData.images = allImages;
+        }
+    }
 
     if(request.body != undefined){
         if(request.body.name != undefined || request.body.name != ''){
@@ -349,8 +359,18 @@ exports.view = async(request, response) => {
 exports.update = async(request, response) => {
     const saveData = request.body
 
-    if(request.file){
-        saveData.image = request.file.filename
+    if(request.files){
+        if(request.files['image']){
+            saveData.image = request.files['image'][0].filename;
+        }
+
+        if(request.files['images']){
+            var allImages = [];
+            request.files['images'].forEach(element => {
+                allImages.push(element.filename);
+            });
+            saveData.images = allImages;
+        }
     }
 
     var slug = slugify(request.body.name, {

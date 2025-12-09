@@ -5,8 +5,9 @@ import "dropify/dist/js/dropify.min.js";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function ProductDetails() {
 
@@ -63,9 +64,9 @@ export default function ProductDetails() {
   }
 
   useEffect(() => {
-    if(parentCategory != ''){
+    if (parentCategory != '') {
       axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}view-sub-categories`, {
-        parent_category_id : parentCategory
+        parent_category_id: parentCategory
       })
         .then((result) => {
           if (result.data._status == true) {
@@ -88,10 +89,10 @@ export default function ProductDetails() {
   }
 
   useEffect(() => {
-    if(subCategory != ''){
+    if (subCategory != '') {
       axios.post(`${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_PRODUCT}view-sub-sub-categories`, {
-        parent_category_id : parentCategory,
-        sub_category_id : subCategory
+        parent_category_id: parentCategory,
+        sub_category_id: subCategory
       })
         .then((result) => {
           if (result.data._status == true) {
@@ -106,10 +107,7 @@ export default function ProductDetails() {
     }
   }, [subCategory])
 
-
-
-
-
+  const [imagePath, setImagePath] = useState('')
 
   useEffect(() => {
     $(".dropify").dropify({
@@ -122,29 +120,93 @@ export default function ProductDetails() {
     });
   }, []);
 
-  const [value, setValue] = useState('');
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
-
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    // alert("Product Created Successfully!");
-  };
-  // update work
-  const [updateIdState, setUpdateIdState] = useState(false)
-  let updateId = useParams().id
   useEffect(() => {
-    if (updateId == undefined) {
-      setUpdateIdState(false)
+    const dropifyElement = $("#image");
+
+    if (dropifyElement.data("dropify")) {
+      dropifyElement.data("dropify").destroy();
+      dropifyElement.removeData("dropify");
     }
-    else {
-      setUpdateIdState(true)
+
+    // **Force Update Dropify Input**
+    dropifyElement.replaceWith(
+      `<input type="file" accept="image/*" name="image" id="image"
+          class="dropify" data-height="250" data-default-file="${imagePath}"/>`
+    );
+
+    // **Reinitialize Dropify**
+    $("#image").dropify();
+
+  }, [imagePath]);
+
+  const [value, setValue] = useState('');
+  const navigate = useNavigate();
+  const params = useParams();
+  const [updateIdState,setUpdateIdState]=useState(false)
+  const [productDetails, setProductDetails] = useState('');
+
+  useEffect(() => {
+    if(params.id != '' && params.id != undefined){
+      setUpdateIdState(params.id);
+
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_PRODUCT }details/${params.id}`)
+      .then((result) => {
+          if (result.data._status == true) {
+              setProductDetails(result.data._data);
+              setValue(result.data._data.description)
+              setParentCategory(result.data._data.parent_category_id);
+              setSubCategory(result.data._data.sub_category_id);
+              setImagePath(result.data._image_path+result.data._data.image)
+          } else {
+              setProductDetails('');
+          }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !!')
+      })
     }
-  }, [updateId])
+  },[params]);
+
+  const formHandler = (event) => {
+    event.preventDefault();
+
+    var dataSave = new FormData(event.target);
+    dataSave.append('description', value);
+
+    if(updateIdState != ''){
+      //Update API
+      axios.put(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_PRODUCT }update/${params.id}`, dataSave)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/product/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+
+
+    } else {
+      // Create API
+      axios.post(`${ import.meta.env.VITE_API_BASE_URL }/${ import.meta.env.VITE_PRODUCT }create`, dataSave)
+      .then((result) => {
+        if(result.data._status == true){
+          event.target.reset();
+          toast.success(result.data._message);
+          navigate('/product/view')
+        } else {
+          toast.error(result.data._message);
+        }
+      })
+      .catch(() => {
+          toast.error('Something went wrong !');
+      })
+    }
+  };
   return (
     <section className="w-full">
 
@@ -170,15 +232,11 @@ export default function ProductDetails() {
         </ol>
       </nav>
 
-
-
       <div className='w-full px-6 py-6  '>
-
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={formHandler} autoComplete='off'>
           <div className="grid grid-cols-3 gap-[10px] ">
             {/* for left */}
             <div className="for-images ">
-
               <div className="">
                 <label
                   htmlFor="ProductImage"
@@ -188,31 +246,12 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="file"
-                  id="ProductImage"
+                  name="image"
+                  accept="image/*"
+                  id="image"
                   className="dropify"
-                  data-height="160"
-                  {...register("productImage", { required: "Product Image is required" })}
+                  data-height="260"
                 />
-                {errors.productImage && <p className="text-red-500 text-sm">{errors.productImage.message}</p>}
-
-
-              </div>
-
-              <div className="">
-                <label
-                  htmlFor="backImage"
-                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
-                >
-                  Back Image
-                </label>
-                <input
-                  type="file"
-                  id="backImage"
-                  className="dropify"
-                  data-height="160"
-                  {...register("backImage", { required: "Back Image is required" })}
-                />
-                {errors.backImage && <p className="text-red-500 text-sm">{errors.backImage.message}</p>}
               </div>
 
               <div className="">
@@ -224,18 +263,18 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="file"
-                  id="GalleryImage"
+                  name='images'
+                  id="images"
+                  accept="image/*"
                   className="dropify"
-                  data-height="160"
-                  {...register("GalleryImage", { required: "Gallery Image is required" })}
+                  data-height="260"
+                  multiple
                 />
-                {errors.GalleryImage && <p className="text-red-500 text-sm">{errors.GalleryImage.message}</p>}
               </div>
             </div>
 
             {/* for midd */}
             <div className="middle">
-
               <div className="mb-5">
                 <label
                   htmlFor="Prodct_Name"
@@ -245,11 +284,27 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="text"
+                  defaultValue={productDetails.name}
+                  name='name'
                   className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                   placeholder='Prodct Name'
-                  {...register("Prodct_Name", { required: "Prodct Name is required" })}
                 />
-                {errors.Prodct_Name && <p className="text-red-500 text-sm">{errors.Prodct_Name.message}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label
+                  htmlFor="Prodct_Name"
+                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
+                >
+                  Product Code
+                </label>
+                <input
+                  type="text"
+                  name='product_code'
+                  defaultValue={productDetails.product_code}
+                  className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
+                  placeholder='Product Code'
+                />
               </div>
 
               <div className="mb-5">
@@ -260,7 +315,7 @@ export default function ProductDetails() {
                   Select Sub Category
                 </label>
                 <select
-                  onChange={ getSubCategory }
+                  onChange={getSubCategory}
                   name='sub_category_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Select Sub Category</option>
@@ -268,13 +323,11 @@ export default function ProductDetails() {
                   {
                     subCategories.map((v, i) => {
                       return (
-                        <option value={v._id}>{v.name}</option>
+                        <option value={v._id} selected={ productDetails.sub_category_id == v._id ? 'selected' : '' }>{v.name}</option>
                       )
                     })
                   }
-
                 </select>
-
               </div>
 
               <div className="mb-5">
@@ -293,7 +346,7 @@ export default function ProductDetails() {
                   {
                     materials.map((v, i) => {
                       return (
-                        <option value={v._id}>{v.name}</option>
+                        <option value={v._id} selected={ productDetails.material_id == v._id ? 'selected' : '' }>{v.name}</option>
                       )
                     })
                   }
@@ -305,19 +358,15 @@ export default function ProductDetails() {
                   htmlFor="categoryName"
                   className="block  text-md font-medium text-gray-900 text-[#76838f]"
                 >
-                  Select Prodcut Type
+                  Is Featured
                 </label>
                 <select
-                  {...register("Prodcut_Type", { required: "Prodcut Type is required" })}
+                  name='is_featured'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Nothing Selected</option>
-                  <option value="">Featured</option>
-                  <option value="">New Arrivals</option>
-                  <option value="">Onsale</option>
-
-
+                  <option value="1" selected={ productDetails.is_featured == 1 ? 'selected' : '' }>Yes</option>
+                  <option value="2" selected={ productDetails.is_featured == 2 ? 'selected' : '' }>No</option>
                 </select>
-                {errors.Prodcut_Type && <p className="text-red-500 text-sm">{errors.Prodcut_Type.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -325,17 +374,31 @@ export default function ProductDetails() {
                   htmlFor="categoryName"
                   className="block  text-md font-medium text-gray-900 text-[#76838f]"
                 >
-                  Is Top Rated
+                  Is New Arrivals
                 </label>
                 <select
-                  {...register("Rated", { required: "Top Rated is required" })}
+                  name='is_new_arrivals'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Nothing Selected</option>
-                  <option value="">Yes</option>
-                  <option value="">No</option>
-
+                  <option value="1" selected={ productDetails.is_new_arrivals == 1 ? 'selected' : '' }>Yes</option>
+                  <option value="2" selected={ productDetails.is_new_arrivals == 2 ? 'selected' : '' }>No</option>
                 </select>
-                {errors.Rated && <p className="text-red-500 text-sm">{errors.Rated.message}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label
+                  htmlFor="categoryName"
+                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
+                >
+                  Is On Sale
+                </label>
+                <select
+                  name='is_on_sale'
+                  className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
+                  <option value="">Nothing Selected</option>
+                  <option value="1" selected={ productDetails.is_on_sale == 1 ? 'selected' : '' }>Yes</option>
+                  <option value="2" selected={ productDetails.is_on_sale == 2 ? 'selected' : '' }>No</option>
+                </select>
               </div>
 
               <div className="mb-5">
@@ -347,31 +410,12 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="text"
-                  {...register("Actual_Price", { required: " Actual Price is required" })}
+                  defaultValue={productDetails.actual_price}
+                  name='actual_price'
                   className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                   placeholder='Actual Price'
                 />
-                {errors.Actual_Price && <p className="text-red-500 text-sm">{errors.Actual_Price.message}</p>}
               </div>
-
-              <div className="mb-5">
-                <label
-                  htmlFor="categoryName"
-                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
-                >
-                  Total In Stocks
-                </label>
-                <input
-                  type="text"
-                  {...register("Stocks", { required: "Stocks is required" })}
-                  className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
-                  placeholder='Total In Stocks'
-                />
-                {errors.Stocks && <p className="text-red-500 text-sm">{errors.Stocks.message}</p>}
-              </div>
-
-
-
             </div>
 
             {/* for right */}
@@ -384,7 +428,7 @@ export default function ProductDetails() {
                   Select Parent Category
                 </label>
                 <select
-                  onChange={ getParentCategory }
+                  onChange={getParentCategory}
                   name='parent_category_id'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Select Parent Category</option>
@@ -392,7 +436,7 @@ export default function ProductDetails() {
                   {
                     parentCategories.map((v, i) => {
                       return (
-                        <option value={v._id}>{v.name}</option>
+                        <option value={v._id} selected={ productDetails.parent_category_id == v._id ? 'selected' : '' }>{v.name}</option>
                       )
                     })
                   }
@@ -415,7 +459,7 @@ export default function ProductDetails() {
                   {
                     subSubCategories.map((v, i) => {
                       return (
-                        <option value={v._id}>{v.name}</option>
+                        <option value={v._id} selected={ productDetails.sub_sub_category_id == v._id ? 'selected' : '' }>{v.name}</option>
                       )
                     })
                   }
@@ -438,7 +482,7 @@ export default function ProductDetails() {
                   {
                     colors.map((v, i) => {
                       return (
-                        <option value={v._id}>{v.name}</option>
+                        <option value={v._id} selected={ productDetails.color_id == v._id ? 'selected' : '' }>{v.name}</option>
                       )
                     })
                   }
@@ -454,14 +498,12 @@ export default function ProductDetails() {
                   Is Best Selling
                 </label>
                 <select
-                  {...register("Selling", { required: " Best Selling is required" })}
+                  name='is_best_sellings'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Nothing Selected</option>
-                  <option value="">Yes</option>
-                  <option value="">No</option>
-
+                  <option value="1" selected={ productDetails.is_best_sellings == 1 ? 'selected' : '' }>Yes</option>
+                  <option value="2" selected={ productDetails.is_best_sellings == 2 ? 'selected' : '' }>No</option>
                 </select>
-                {errors.Selling && <p className="text-red-500 text-sm">{errors.Selling.message}</p>}
               </div>
 
               <div className="mb-5">
@@ -472,14 +514,44 @@ export default function ProductDetails() {
                   Is Upsell
                 </label>
                 <select
-                  {...register("Upsell", { required: "Upsell is required" })}
+                  name='is_up_sell'
                   className="text-[19px] text-[#76838f] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg block w-full py-2.5 px-3">
                   <option value="">Nothing Selected</option>
-                  <option value="">Yes</option>
-                  <option value="">No</option>
-
+                  <option value="1" selected={ productDetails.is_up_sell == 1 ? 'selected' : '' }>Yes</option>
+                  <option value="2" selected={ productDetails.is_up_sell == 2 ? 'selected' : '' }>No</option>
                 </select>
-                {errors.Upsell && <p className="text-red-500 text-sm">{errors.Upsell.message}</p>}
+              </div>
+
+              <div className="mb-5">
+                <label
+                  htmlFor="categoryName"
+                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
+                >
+                  Dimesnsion
+                </label>
+                <input
+                  type="text"
+                  defaultValue={productDetails.dimesnsion}
+                  className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
+                  placeholder='Dimesnsion'
+                  name='dimesnsion'
+                />
+              </div>
+
+              <div className="mb-5">
+                <label
+                  htmlFor="categoryName"
+                  className="block  text-md font-medium text-gray-900 text-[#76838f]"
+                >
+                  Delivery Days
+                </label>
+                <input
+                  type="text"
+                  defaultValue={productDetails.delivery_days}
+                  className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
+                  placeholder='Delivery Days'
+                  name='delivery_days'
+                />
               </div>
 
               <div className="mb-5">
@@ -491,13 +563,12 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="text"
+                  defaultValue={productDetails.sale_price}
                   className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                   placeholder=' Sale Price'
-                  {...register("Sale_Price", { required: "Sale Price is required" })}
+                  name='sale_price'
                 />
-                {errors.Sale_Price && <p className="text-red-500 text-sm">{errors.Sale_Price.message}</p>}
               </div>
-
 
               <div className="mb-5">
                 <label
@@ -508,11 +579,11 @@ export default function ProductDetails() {
                 </label>
                 <input
                   type="text"
+                  defaultValue={productDetails.order}
                   className="text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3"
                   placeholder='Order'
-                  {...register("Order", { required: " Order is required" })}
+                  name="order"
                 />
-                {errors.Order && <p className="text-red-500 text-sm">{errors.Order.message}</p>}
               </div>
 
 
@@ -524,14 +595,22 @@ export default function ProductDetails() {
               htmlFor="categoryImage"
               className="block  text-md font-medium text-gray-900 text-[#76838f]"
             >
-              Description
+              Short Description
             </label>
-            <ReactQuill theme="snow" value={value} onChange={setValue} className='h-[200px]' {...register("description", { required: "Description is required" })} />
+            <textarea name='short_description' className='text-[19px] border-2 shadow-sm border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 px-3' defaultValue={productDetails.short_description}></textarea>
 
           </div>
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
+
+          <div className='py-[40px]'>
+            <label
+              htmlFor="categoryImage"
+              className="block  text-md font-medium text-gray-900 text-[#76838f]"
+            >
+              Description
+            </label>
+            <ReactQuill theme="snow" value={value} onChange={setValue} className='h-[200px]' />
+
+          </div>
 
           <button class=" mt-5 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 ">
             {updateIdState ? "Update Product " : "Add Product"}
