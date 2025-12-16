@@ -26,7 +26,7 @@ server.use('/uploads/categories', express.static('uploads/categories'));
 server.use('/uploads/products', express.static('uploads/products'));
 
 // Website URL
-
+require('./src/routes/website/user.routes')(server);
 
 // Application URL
 
