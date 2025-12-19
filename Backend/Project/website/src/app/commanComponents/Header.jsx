@@ -11,6 +11,7 @@ import { RxCross2 } from "react-icons/rx";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Accordion from 'react-bootstrap/Accordion';
 import { FaAngleDown } from "react-icons/fa6";
+import { ToastContainer } from "react-toastify";
 
 export default function Header() {
     const [showCart, setShowCart] = useState(false);
@@ -26,6 +27,7 @@ export default function Header() {
     return (
         <>
             {/* Desktop Header */}
+            <ToastContainer/>
             <div className="d-none d-lg-block" >
                 <Container fluid className="border-bottom myheader-top ">
                     <Container>
