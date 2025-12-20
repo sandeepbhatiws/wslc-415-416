@@ -11,7 +11,10 @@ import { RxCross2 } from "react-icons/rx";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Accordion from 'react-bootstrap/Accordion';
 import { FaAngleDown } from "react-icons/fa6";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../ReduxToolkit/loginSlice";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
     const [showCart, setShowCart] = useState(false);
@@ -24,10 +27,23 @@ export default function Header() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const isLogin = useSelector((state) => {
+        return state.login.value
+    })
+
+    const dispatach = useDispatch();
+    const router = useRouter();
+
+    const logoutUser = () => {
+        dispatach(logout())
+        router.push('/');
+        toast.success('Logout successfully')
+    }
+
     return (
         <>
             {/* Desktop Header */}
-            <ToastContainer/>
+            <ToastContainer />
             <div className="d-none d-lg-block" >
                 <Container fluid className="border-bottom myheader-top ">
                     <Container>
@@ -39,12 +55,30 @@ export default function Header() {
                             </Col>
                             <Col lg={5} md={12}>
 
-                                <Link href={"/login-register"}>
-                                    <ul className="auth d-flex justify-content-end">
-                                        <li>Login &nbsp;/</li>
-                                        <li>Register</li>
-                                    </ul>
-                                </Link>
+                                {
+                                    isLogin
+                                        ?
+                                        <>
+                                            <Link href={"/my-dashboard"}>
+                                                <ul className="auth d-flex justify-content-end">
+                                                    <li>My Dashboard &nbsp;/</li>
+                                                </ul>
+                                            </Link>
+                                            
+                                            <ul onClick={ logoutUser } className="auth d-flex justify-content-end">
+                                                <li>Logout/</li>
+                                            </ul>
+                                        </>
+                                        :
+                                        <Link href={"/login-register"}>
+                                            <ul className="auth d-flex justify-content-end">
+                                                <li>Login &nbsp;/</li>
+                                                <li>Register</li>
+                                            </ul>
+                                        </Link>
+
+                                }
+
 
                             </Col>
                         </Row>

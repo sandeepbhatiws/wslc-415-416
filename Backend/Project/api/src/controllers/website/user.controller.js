@@ -286,27 +286,37 @@ exports.forgotPassword = async(request, response) => {
         response.send(data)
     }
 
-    // Create a test account or replace with real credentials.
+    // generate a signed reset token (valid for 1 hour)
+    const resetToken = jwt.sign({ email: userInfo.email }, process.env.secret_key, { expiresIn: '1h' });
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
+
     const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        service: "gmail",
         auth: {
-            user: "maddison53@ethereal.email",
-            pass: "jn7jnAPss4f63QBp6D",
+            user: process.env.email,
+            pass: process.env.password,
         },
     });
 
-    await transporter.sendMail({
-        from: '"Maddison Foo Koch" <maddison53@ethereal.email>',
-        to: "bar@example.com, baz@example.com",
-        subject: "Hello ✔",
-        // text: "Hello world?", // plain‑text body
-        html: "<b>Hello world?</b>", // HTML body
-    }).then(() => {
+    const mailOptions = {
+        from: `${process.env.APP_NAME || 'WsCubeTech'} <${process.env.email}>`,
+        to: userInfo.email,
+        subject: "Password reset request",
+        html: `
+            <p>Hi ${userInfo.name || ''},</p>
+            <p>We received a request to reset your password. Click the link below to reset it. This link is valid for 1 hour.</p>
+            <p><a href="${resetLink}">Reset your password</a></p>
+            <p>If you didn't request this, please ignore this email.</p>
+        `
+    };
+
+    await transporter.sendMail(mailOptions)
+    .then(() => {
         const data = {
             _status : true,
-            _message : 'Mail send succussfully !!',
+            _message : 'Password reset link sent to your email.',
             _data : null
         }
 
@@ -315,12 +325,53 @@ exports.forgotPassword = async(request, response) => {
     .catch((error) => {
         const data = {
             _status : false,
-            _message : 'Soenthing went wrong !!',
+            _message : 'Something went wrong while sending email.',
             _error : error,
             _data : null
         }
 
         response.send(data)
+    })
+}
+
+exports.resetPassword = async (request, response) => {
+    const { token, new_password, confirm_password } = request.body;
+
+    if(!token){
+        return response.send({ _status: false, _message: 'Token is required', _data: null });
+    }
+
+    if(!new_password || !confirm_password){
+        return response.send({ _status: false, _message: 'Password and confirm password are required', _data: null });
+    }
+
+    if(new_password !== confirm_password){
+        return response.send({ _status: false, _message: 'New password and confirm password must match', _data: null });
+    }
+
+    let decoded;
+    try{
+        decoded = jwt.verify(token, process.env.secret_key);
+    } catch(err){
+        return response.send({ _status: false, _message: 'Invalid or expired token', _data: null });
+    }
+
+    const email = decoded.email;
+
+    const userInfo = await userModal.findOne({ email: email, deleted_at: null, role_type: 'user' });
+
+    if(!userInfo){
+        return response.send({ _status: false, _message: 'User not found', _data: null });
+    }
+
+    const hashed = await bcrypt.hash(new_password, saltRounds);
+
+    await userModal.updateOne({ _id: userInfo._id }, { $set: { password: hashed } })
+    .then(() => {
+        return response.send({ _status: true, _message: 'Password reset successfully', _data: null });
+    })
+    .catch((error) => {
+        return response.send({ _status: false, _message: 'Something went wrong', _error: error, _data: null });
     })
 }
 

@@ -1,11 +1,35 @@
 'use client'
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 
 export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState('dashboard');
-    const [selectedTitle, setSelectedTitle] = useState("Mr.");
+    // const [selectedTitle, setSelectedTitle] = useState("Mr.");
+
+    const [userProfile, setUserProfile] = useState('');
+
+    useEffect(() => {
+        axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/view-profile`,{}, {
+            headers : {
+                Authorization : `Bearer ${Cookies.get('token')}`
+            }
+        })
+        .then((result) => {            
+            if(result.data._status == true){
+                setUserProfile(result.data._data);
+            } else {
+                setUserProfile('');
+                toast.error(result.data._message)
+            }
+        })
+        .catch(() => {
+            toast.error('Something went wrong !')
+        })
+    },[])
+
 
     return (
         <>
@@ -280,7 +304,7 @@ export default function DashboardPage() {
                                                                     type="radio"
                                                                     value="Mr."
                                                                     name="title"
-                                                                    checked={selectedTitle === "Mr."}
+                                                                    checked=''
                                                                     onChange={(e) => setSelectedTitle(e.target.value)}
                                                                 />
                                                                 Mr.
@@ -291,7 +315,7 @@ export default function DashboardPage() {
                                                                     type="radio"
                                                                     value="Mrs."
                                                                     name="title"
-                                                                    checked={selectedTitle === "Mrs."}
+                                                                    checked=''
                                                                     onChange={(e) => setSelectedTitle(e.target.value)}
                                                                 />
                                                                 Mrs.
@@ -302,28 +326,28 @@ export default function DashboardPage() {
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Name*</label>
-                                                            <input type="text" className="form-control" id="name" name="name" data-bv-field="name" />
+                                                            <input type="text" className="form-control" defaultValue={userProfile.name} id="name" name="name" data-bv-field="name" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Email*</label>
-                                                            <input type="text" className="form-control" id="email" name="email" placeholdere="sultankhan.wscube@gmail.com" readOnly="readOnly" data-bv-field="email" />
+                                                            <input type="text" value={userProfile.email} className="form-control" id="email" placeholdere="sultankhan.wscube@gmail.com" readOnly="readOnly" data-bv-field="email" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Mobile Number*</label>
-                                                            <input type="text" className="form-control numeric" id="mobile_number" maxLength="15" name="mobile_number" data-bv-field="mobile_number" />
+                                                            <input type="text" defaultValue={userProfile.mobile_number} className="form-control numeric" id="mobile_number" maxLength="15" name="mobile_number" data-bv-field="mobile_number" />
                                                         </div>
                                                     </div>
 
                                                     <div className="col-xl-12">
                                                         <div className="form-group has-feedback">
                                                             <label htmlFor="name">Address*</label>
-                                                            <input type="text" className="form-control" name="address" id="address"  data-bv-field="address" />
+                                                            <input type="text" defaultValue={userProfile.address} className="form-control" name="address" id="address"  data-bv-field="address" />
                                                         </div>
                                                     </div>
 

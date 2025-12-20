@@ -5,12 +5,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { login, register } from '../ReduxToolkit/loginSlice';
 
 export default function page() {
 
     const [registerButton, setRegisterButton] = useState(false);
     const [loginButton, setLoginButton] = useState(false);
     const router = useRouter();
+    const dispatach = useDispatch();
 
     const loginHandler = (event) => {
         event.preventDefault();
@@ -24,6 +27,7 @@ export default function page() {
                 event.target.reset();
                 toast.success(result.data._message);
                 Cookies.set('token', result.data._token)
+                dispatach(login());
                 router.push('/my-dashboard');
             } else {
                 toast.error(result.data._message);
@@ -47,6 +51,7 @@ export default function page() {
                 event.target.reset();
                 toast.success(result.data._message);
                 Cookies.set('token', result.data._token)
+                dispatach(register());
                 router.push('/my-dashboard');
             } else {
                 toast.error(result.data._message);
