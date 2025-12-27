@@ -27,6 +27,7 @@ server.use('/uploads/products', express.static('uploads/products'));
 
 // Website URL
 require('./src/routes/website/user.routes')(server);
+require('./src/routes/website/order.routes')(server);
 
 // Application URL
 

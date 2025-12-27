@@ -4,12 +4,14 @@ import Cookies from 'js-cookie';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 export default function DashboardPage() {
     const [activeTab, setActiveTab] = useState('dashboard');
-    // const [selectedTitle, setSelectedTitle] = useState("Mr.");
+    const [selectedTitle, setSelectedTitle] = useState("");
 
     const [userProfile, setUserProfile] = useState('');
+    const [apiStatus, setApiStatus] = useState(true);
 
     useEffect(() => {
         axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/view-profile`,{}, {
@@ -20,15 +22,59 @@ export default function DashboardPage() {
         .then((result) => {            
             if(result.data._status == true){
                 setUserProfile(result.data._data);
+                setSelectedTitle(result.data._data.gender);
             } else {
                 setUserProfile('');
+                setSelectedTitle('');
                 toast.error(result.data._message)
             }
         })
         .catch(() => {
             toast.error('Something went wrong !')
         })
-    },[])
+    },[apiStatus])
+
+    const updateProfile = (event) => {
+        event.preventDefault();
+
+        axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/update-profile`,event.target, {
+            headers : {
+                Authorization : `Bearer ${Cookies.get('token')}`
+            }
+        })
+        .then((result) => {
+            if(result.data._status == true){
+                toast.success(result.data._message)
+                setApiStatus(!apiStatus);
+            } else {
+                toast.error(result.data._message)
+            }
+        })
+        .catch(() => {
+            toast.error('Something went wrong !')
+        });
+    }
+
+    const changePassword = (event) => {
+        event.preventDefault();
+
+        axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/change-password`,event.target, {
+            headers : {
+                Authorization : `Bearer ${Cookies.get('token')}`
+            }
+        })
+        .then((result) => {
+            if(result.data._status == true){
+                toast.success(result.data._message)
+                event.target.reset();
+            } else {
+                toast.error(result.data._message)
+            }
+        })
+        .catch(() => {
+            toast.error('Something went wrong !')
+        });
+    }
 
 
     return (
@@ -295,30 +341,30 @@ export default function DashboardPage() {
                                     <div className="login">
                                         <div className="account_form login_form_container">
                                             <div className="account_login_form">
-                                                <form id="personal_information" autoComplete="off" noValidate="noValidate" className="bv-form">
+                                                <form id="personal_information" autoComplete="off" noValidate="noValidate" className="bv-form" onSubmit={ updateProfile }>
 
                                                     <div className="col-xl-12">
                                                         <div className="input-radio">
                                                             <span className="custom-radio">
                                                                 <input
                                                                     type="radio"
-                                                                    value="Mr."
-                                                                    name="title"
-                                                                    checked=''
+                                                                    value="Male"
+                                                                    name="gender"
+                                                                    checked={selectedTitle == 'Male' ? 'checked' : ''}
                                                                     onChange={(e) => setSelectedTitle(e.target.value)}
                                                                 />
-                                                                Mr.
+                                                                Male
                                                             </span>
 
                                                             <span className="custom-radio">
                                                                 <input
                                                                     type="radio"
-                                                                    value="Mrs."
-                                                                    name="title"
-                                                                    checked=''
+                                                                    value="Female"
+                                                                    name="gender"
+                                                                    checked={selectedTitle == 'Female' ? 'checked' : ''}
                                                                     onChange={(e) => setSelectedTitle(e.target.value)}
                                                                 />
-                                                                Mrs.
+                                                                Female
                                                             </span>
                                                         </div>
                                                     </div>
@@ -370,21 +416,21 @@ export default function DashboardPage() {
                                 <div className="login">
                                     <div className="account_form login_form_container">
                                         <div className="account_login_form">
-                                        <form method="POST" acceptCharset="UTF-8" id="change_password" className="bv-form" autoComplete="off" noValidate="noValidate">
+                                        <form method="POST" acceptCharset="UTF-8" id="change_password" className="bv-form" autoComplete="off" noValidate="noValidate" onSubmit={ changePassword }>
 
                                             <div className="form-group has-feedback">
                                                 <label>Current Password</label>
-                                                <input type="password" className="form-control" name="currentpassword" id="currentpassword" data-bv-field="currentpassword"/>
+                                                <input type="password" className="form-control" name="current_password" id="currentpassword" data-bv-field="currentpassword"/>
                                             </div>
 
                                             <div className="form-group has-feedback">
                                                 <label>New Password</label>
-                                                <input type="password" className="form-control" name="password" id="password" data-bv-field="password" />
+                                                <input type="password" className="form-control" name="new_password" id="password" data-bv-field="password" />
                                             </div>
 
                                             <div className="form-group has-feedback">
                                                 <label>Confirm Password</label>
-                                                <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" data-bv-field="confirmPassword" />
+                                                <input type="password" className="form-control" id="confirm_password" name="confirm_password" data-bv-field="confirmPassword" />
                                             </div>
 
                                             <br/>

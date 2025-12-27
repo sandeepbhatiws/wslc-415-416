@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { login, register } from '../ReduxToolkit/loginSlice';
+import Link from 'next/link';
 
 export default function page() {
 
@@ -100,7 +101,7 @@ export default function page() {
                                         <input type="password" name='password' />
                                     </p>
                                     <div className="login_submit">
-                                        <a href="#">Lost your password?</a>
+                                        <Link href="forgot-password">Lost your password?</Link>
                                         
                                         <button type="submit" disabled={ loginButton ? 'disabled' : '' } >
 

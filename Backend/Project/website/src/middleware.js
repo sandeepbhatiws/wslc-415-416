@@ -10,9 +10,15 @@ export default function middleware(request) {
         return NextResponse.redirect(new URL('/login-register', request.url));
     }
 
+    if((isLogin == '' || isLogin == undefined) && request.nextUrl.pathname.startsWith('/checkout')){
+        return NextResponse.redirect(new URL('/login-register', request.url));
+    }
+
     if(isLogin != '' && isLogin != undefined && request.nextUrl.pathname.startsWith('/login-register')){
         return NextResponse.redirect(new URL('/my-dashboard', request.url));
     }
+
+    
 
     return NextResponse.next();
 }
